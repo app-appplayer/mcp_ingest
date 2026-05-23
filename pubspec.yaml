@@ -1,6 +1,6 @@
 name: mcp_ingest
 description: Convert any file format to standardized document structure for the MCP knowledge system.
-version: 0.1.0
+version: 0.1.1
 homepage: https://app-appplayer.github.io/makemind
 repository: https://github.com/app-appplayer/mcp_ingest
 issue_tracker: https://github.com/app-appplayer/mcp_ingest/issues
@@ -17,8 +17,8 @@ environment:
 
 dependencies:
   # MCP Ecosystem
-  mcp_fact_graph: ^0.2.0
-  mcp_bundle: ^0.3.0
+  mcp_fact_graph: ^0.2.2
+  mcp_bundle: ^0.4.0
 
   # Core utilities
   uuid: ^4.0.0
