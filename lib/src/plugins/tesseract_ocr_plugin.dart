@@ -69,10 +69,12 @@ class TesseractOcrPlugin implements OcrPort, NativePlugin {
         outputBase,
         '-l', options.language,
         if (options.pageSegMode != null) ...[
-          '--psm', options.pageSegMode.toString(),
+          '--psm',
+          options.pageSegMode.toString(),
         ],
         if (dataDir != null) ...[
-          '--tessdata-dir', dataDir!,
+          '--tessdata-dir',
+          dataDir!,
         ],
         if (options.preserveLayout) ...[
           '--psm', '6', // Assume uniform block of text

@@ -16,7 +16,11 @@ class SentenceChunker implements Chunker {
   String get name => 'Sentence Chunker';
 
   /// Sentence-ending punctuation pattern.
-  static final _sentenceEnd = RegExp(r'[.!?]+[\s\n]+|[.!?]+$');
+  ///
+  /// Latin terminators need trailing whitespace (or the end of the text); CJK
+  /// terminators end a sentence on their own because those scripts do not put
+  /// a space after them.
+  static final _sentenceEnd = RegExp(r'[.!?]+[\s\n]+|[.!?]+$|[。！？]+');
 
   /// Abbreviation patterns that don't end sentences.
   static final _abbreviations = RegExp(
@@ -25,7 +29,8 @@ class SentenceChunker implements Chunker {
   );
 
   @override
-  Future<List<Chunk>> chunk(NormalizedDocument document, ChunkOptions options) async {
+  Future<List<Chunk>> chunk(
+      NormalizedDocument document, ChunkOptions options) async {
     final chunks = <Chunk>[];
     var currentText = StringBuffer();
     var currentSpans = <ChunkSpan>[];
@@ -142,7 +147,7 @@ class SentenceChunker implements Chunker {
 
     // Find last sentence boundary within limit
     final truncated = text.substring(text.length - maxLength);
-    final sentenceStart = truncated.indexOf(RegExp(r'[.!?]\s+'));
+    final sentenceStart = truncated.indexOf(RegExp(r'[.!?]\s+|[。！？]'));
     if (sentenceStart > 0) {
       return truncated.substring(sentenceStart + 1).trim();
     }

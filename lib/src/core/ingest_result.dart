@@ -77,8 +77,7 @@ class IngestResult {
   }
 
   /// Total text length in chunks.
-  int get totalChunkLength =>
-      chunks.fold(0, (sum, c) => sum + c.text.length);
+  int get totalChunkLength => chunks.fold(0, (sum, c) => sum + c.text.length);
 
   /// Total fragments extracted.
   int get fragmentCount => fragments.length;

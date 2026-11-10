@@ -1,6 +1,7 @@
 import 'package:test/test.dart';
 import 'package:mcp_ingest/mcp_ingest.dart';
-import 'package:mcp_bundle/ports.dart' show LlmPort, LlmCapabilities, LlmRequest, LlmResponse;
+import 'package:mcp_bundle/ports.dart'
+    show LlmPort, LlmCapabilities, LlmRequest, LlmResponse;
 
 void main() {
   group('ChunkOptions', () {
@@ -71,9 +72,12 @@ void main() {
   group('ChunkerFactory', () {
     test('creates correct chunker for strategy', () {
       final factory = ChunkerFactory();
-      expect(factory.create(ChunkingStrategy.sentence).id, equals('sentence_v1'));
-      expect(factory.create(ChunkingStrategy.paragraph).id, equals('paragraph_v1'));
-      expect(factory.create(ChunkingStrategy.fixedSize).id, equals('fixed_size_v1'));
+      expect(
+          factory.create(ChunkingStrategy.sentence).id, equals('sentence_v1'));
+      expect(factory.create(ChunkingStrategy.paragraph).id,
+          equals('paragraph_v1'));
+      expect(factory.create(ChunkingStrategy.fixedSize).id,
+          equals('fixed_size_v1'));
       expect(factory.create(ChunkingStrategy.none).id, equals('none_v1'));
       expect(factory.create(ChunkingStrategy.page).id, equals('page_v1'));
       expect(factory.create(ChunkingStrategy.table).id, equals('table_v1'));
@@ -1065,7 +1069,8 @@ void main() {
 
     test('split page breaks at paragraph boundary', () async {
       // Create text with paragraph breaks
-      final text = '${'First paragraph content. ' * 10}\n\n${'Second paragraph content. ' * 10}';
+      final text =
+          '${'First paragraph content. ' * 10}\n\n${'Second paragraph content. ' * 10}';
       final doc = _createDocWithParts(
         [TextBlock(id: 'p0', text: text)],
         structure: DocumentStructure(nodes: [
@@ -1178,9 +1183,13 @@ void main() {
     test('splits large table exceeding maxSize', () async {
       // Create a table with many rows
       final rows = <TableRow>[
-        const TableRow(cells: [TableCell(text: 'Header1'), TableCell(text: 'Header2')]),
+        const TableRow(
+            cells: [TableCell(text: 'Header1'), TableCell(text: 'Header2')]),
         for (var i = 0; i < 50; i++)
-          TableRow(cells: [TableCell(text: 'Row $i Col 1 data'), TableCell(text: 'Row $i Col 2 data')]),
+          TableRow(cells: [
+            TableCell(text: 'Row $i Col 1 data'),
+            TableCell(text: 'Row $i Col 2 data')
+          ]),
       ];
       final doc = _createDocWithParts([
         TableBlock(
@@ -1208,9 +1217,13 @@ void main() {
 
     test('header row preserved in split tables', () async {
       final rows = <TableRow>[
-        const TableRow(cells: [TableCell(text: 'Name'), TableCell(text: 'Age')]),
+        const TableRow(
+            cells: [TableCell(text: 'Name'), TableCell(text: 'Age')]),
         for (var i = 0; i < 30; i++)
-          TableRow(cells: [TableCell(text: 'Person $i'), TableCell(text: '${20 + i}')]),
+          TableRow(cells: [
+            TableCell(text: 'Person $i'),
+            TableCell(text: '${20 + i}')
+          ]),
       ];
       final doc = _createDocWithParts([
         TableBlock(
@@ -1755,7 +1768,8 @@ void main() {
 
     test('overlap text finds sentence boundary', () async {
       // Large content with clear sentence boundaries
-      final text = List.generate(30, (i) => 'Sentence $i is complete.').join(' ');
+      final text =
+          List.generate(30, (i) => 'Sentence $i is complete.').join(' ');
       final doc = _createTestDocument([text]);
       final options = const ChunkOptions(
         maxSize: 150,
@@ -1949,7 +1963,10 @@ void main() {
         const ListBlock(
           id: 'list0',
           type: ListType.unordered,
-          items: [ListItem(text: 'List item one'), ListItem(text: 'List item two')],
+          items: [
+            ListItem(text: 'List item one'),
+            ListItem(text: 'List item two')
+          ],
         ),
       ]);
       final chunks = await chunker.chunk(doc, ChunkOptions.defaults);

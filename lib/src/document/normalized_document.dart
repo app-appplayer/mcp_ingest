@@ -69,20 +69,16 @@ class NormalizedDocument {
   }
 
   /// Get all text blocks.
-  List<TextBlock> get textBlocks =>
-      parts.whereType<TextBlock>().toList();
+  List<TextBlock> get textBlocks => parts.whereType<TextBlock>().toList();
 
   /// Get all table blocks.
-  List<TableBlock> get tableBlocks =>
-      parts.whereType<TableBlock>().toList();
+  List<TableBlock> get tableBlocks => parts.whereType<TableBlock>().toList();
 
   /// Get all image blocks.
-  List<ImageBlock> get imageBlocks =>
-      parts.whereType<ImageBlock>().toList();
+  List<ImageBlock> get imageBlocks => parts.whereType<ImageBlock>().toList();
 
   /// Get all audio blocks.
-  List<AudioBlock> get audioBlocks =>
-      parts.whereType<AudioBlock>().toList();
+  List<AudioBlock> get audioBlocks => parts.whereType<AudioBlock>().toList();
 
   /// Get all key-value blocks.
   List<KeyValueBlock> get keyValueBlocks =>
@@ -116,8 +112,8 @@ class NormalizedDocument {
   factory NormalizedDocument.fromJson(Map<String, dynamic> json) {
     return NormalizedDocument(
       id: json['id'] as String,
-      metadata: DocumentMetadata.fromJson(
-          json['metadata'] as Map<String, dynamic>),
+      metadata:
+          DocumentMetadata.fromJson(json['metadata'] as Map<String, dynamic>),
       parts: _parsePartsFromJson(json['parts'] as List<dynamic>? ?? []),
       structure: json['structure'] != null
           ? DocumentStructure.fromJson(

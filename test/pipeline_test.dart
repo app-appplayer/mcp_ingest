@@ -209,7 +209,8 @@ void main() {
     });
 
     test('recordStageDuration records duration', () {
-      context.recordStageDuration('extraction', const Duration(milliseconds: 100));
+      context.recordStageDuration(
+          'extraction', const Duration(milliseconds: 100));
       expect(context.stageDurations['extraction']?.inMilliseconds, equals(100));
     });
 
@@ -364,7 +365,8 @@ void main() {
       expect(result.evidence!.contentHash, isNotEmpty);
       expect(result.error, isNull);
       expect(result.metrics.totalDuration.inMicroseconds, greaterThan(0));
-      expect(result.metrics.extractionDuration.inMicroseconds, greaterThanOrEqualTo(0));
+      expect(result.metrics.extractionDuration.inMicroseconds,
+          greaterThanOrEqualTo(0));
     });
 
     test('returns error when file exceeds maxFileSize', () async {
@@ -382,7 +384,8 @@ void main() {
       expect(result.error!.message, contains('exceeds limit'));
     });
 
-    test('returns error when no extractor found for unsupported type', () async {
+    test('returns error when no extractor found for unsupported type',
+        () async {
       final input = IngestInput(
         stream: Stream.value(utf8.encode('data')),
         mimeType: 'video/mp4',
@@ -536,13 +539,39 @@ void main() {
     test('evidence sourceType maps correctly for image', () async {
       // Create minimal PNG
       final pngBytes = Uint8List.fromList([
-        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
-        0x00, 0x00, 0x00, 0x0D,
-        0x49, 0x48, 0x44, 0x52,
-        0x00, 0x00, 0x00, 0x08,
-        0x00, 0x00, 0x00, 0x08,
-        0x08, 0x02, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
+        0x89,
+        0x50,
+        0x4E,
+        0x47,
+        0x0D,
+        0x0A,
+        0x1A,
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x0D,
+        0x49,
+        0x48,
+        0x44,
+        0x52,
+        0x00,
+        0x00,
+        0x00,
+        0x08,
+        0x00,
+        0x00,
+        0x00,
+        0x08,
+        0x08,
+        0x02,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
       ]);
 
       final input = IngestInput.fromBytes(
@@ -613,9 +642,12 @@ void main() {
 
     test('ingestAll processes multiple inputs', () async {
       final inputs = [
-        IngestInput.fromString('First document content.', mimeType: 'text/plain'),
-        IngestInput.fromString('Second document content.', mimeType: 'text/plain'),
-        IngestInput.fromString('Third document content.', mimeType: 'text/plain'),
+        IngestInput.fromString('First document content.',
+            mimeType: 'text/plain'),
+        IngestInput.fromString('Second document content.',
+            mimeType: 'text/plain'),
+        IngestInput.fromString('Third document content.',
+            mimeType: 'text/plain'),
       ];
 
       final results = await pipeline.ingestAll(inputs, IngestOptions.defaults);
@@ -647,7 +679,8 @@ void main() {
     test('ingestAll with concurrency parameter', () async {
       final inputs = List.generate(
         5,
-        (i) => IngestInput.fromString('Document $i content.', mimeType: 'text/plain'),
+        (i) => IngestInput.fromString('Document $i content.',
+            mimeType: 'text/plain'),
       );
 
       final results = await pipeline.ingestAll(
@@ -743,13 +776,39 @@ void main() {
     test('asset caching for image blocks', () async {
       // Minimal PNG
       final pngBytes = Uint8List.fromList([
-        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
-        0x00, 0x00, 0x00, 0x0D,
-        0x49, 0x48, 0x44, 0x52,
-        0x00, 0x00, 0x00, 0x04,
-        0x00, 0x00, 0x00, 0x04,
-        0x08, 0x02, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00,
+        0x89,
+        0x50,
+        0x4E,
+        0x47,
+        0x0D,
+        0x0A,
+        0x1A,
+        0x0A,
+        0x00,
+        0x00,
+        0x00,
+        0x0D,
+        0x49,
+        0x48,
+        0x44,
+        0x52,
+        0x00,
+        0x00,
+        0x00,
+        0x04,
+        0x00,
+        0x00,
+        0x00,
+        0x04,
+        0x08,
+        0x02,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
       ]);
 
       final input = IngestInput.fromBytes(
@@ -1168,8 +1227,7 @@ void main() {
 
   group('Enhance stage - VisionPort', () {
     test('performs vision description on ImageBlock', () async {
-      final visionPort =
-          _MockVisionPort(description: 'A photo of a landscape');
+      final visionPort = _MockVisionPort(description: 'A photo of a landscape');
       final pipeline = IngestPipeline(
         extractors: ExtractorRegistry.defaults(),
         chunkerFactory: ChunkerFactory(),
@@ -1532,7 +1590,8 @@ void main() {
       expect(calls, equals(['s1', 's2']));
     });
 
-    test('custom stage failure becomes a warning, pipeline continues', () async {
+    test('custom stage failure becomes a warning, pipeline continues',
+        () async {
       final pipeline = IngestPipeline(
         extractors: ExtractorRegistry.defaults(),
         chunkerFactory: ChunkerFactory(),

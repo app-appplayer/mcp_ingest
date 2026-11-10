@@ -94,9 +94,11 @@ void main() {
         const ExtractOptions(custom: {'isMarkdown': true}),
       );
 
-      expect(result.parts.whereType<TextBlock>().any(
-            (b) => b.type == TextBlockType.heading,
-          ), true);
+      expect(
+          result.parts.whereType<TextBlock>().any(
+                (b) => b.type == TextBlockType.heading,
+              ),
+          true);
     });
   });
 

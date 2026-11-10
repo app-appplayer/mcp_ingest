@@ -302,24 +302,104 @@ void main() {
       // Test all value type mappings by providing extractions with each type.
       mockLlm.responseContent = jsonEncode({
         'extractions': [
-          {'field': 'f1', 'value': '42', 'valueType': 'number', 'confidence': 0.9},
+          {
+            'field': 'f1',
+            'value': '42',
+            'valueType': 'number',
+            'confidence': 0.9
+          },
           {'field': 'f2', 'value': '42', 'valueType': 'int', 'confidence': 0.9},
-          {'field': 'f3', 'value': '42', 'valueType': 'integer', 'confidence': 0.9},
-          {'field': 'f4', 'value': '3.14', 'valueType': 'float', 'confidence': 0.9},
-          {'field': 'f5', 'value': '3.14', 'valueType': 'double', 'confidence': 0.9},
-          {'field': 'f6', 'value': '2025-01-01', 'valueType': 'date', 'confidence': 0.9},
-          {'field': 'f7', 'value': '2025-01-01T10:00', 'valueType': 'datetime', 'confidence': 0.9},
-          {'field': 'f8', 'value': '10:00', 'valueType': 'time', 'confidence': 0.9},
-          {'field': 'f9', 'value': '100.00', 'valueType': 'currency', 'confidence': 0.9},
-          {'field': 'f10', 'value': '100.00', 'valueType': 'money', 'confidence': 0.9},
-          {'field': 'f11', 'value': '100.00', 'valueType': 'amount', 'confidence': 0.9},
-          {'field': 'f12', 'value': '50%', 'valueType': 'percentage', 'confidence': 0.9},
-          {'field': 'f13', 'value': '50%', 'valueType': 'percent', 'confidence': 0.9},
+          {
+            'field': 'f3',
+            'value': '42',
+            'valueType': 'integer',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f4',
+            'value': '3.14',
+            'valueType': 'float',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f5',
+            'value': '3.14',
+            'valueType': 'double',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f6',
+            'value': '2025-01-01',
+            'valueType': 'date',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f7',
+            'value': '2025-01-01T10:00',
+            'valueType': 'datetime',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f8',
+            'value': '10:00',
+            'valueType': 'time',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f9',
+            'value': '100.00',
+            'valueType': 'currency',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f10',
+            'value': '100.00',
+            'valueType': 'money',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f11',
+            'value': '100.00',
+            'valueType': 'amount',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f12',
+            'value': '50%',
+            'valueType': 'percentage',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f13',
+            'value': '50%',
+            'valueType': 'percent',
+            'confidence': 0.9
+          },
           {'field': 'f14', 'value': '50%', 'valueType': '%', 'confidence': 0.9},
-          {'field': 'f15', 'value': 'true', 'valueType': 'boolean', 'confidence': 0.9},
-          {'field': 'f16', 'value': 'true', 'valueType': 'bool', 'confidence': 0.9},
-          {'field': 'f17', 'value': 'hello', 'valueType': 'string', 'confidence': 0.9},
-          {'field': 'f18', 'value': 'hello', 'valueType': 'unknown_type', 'confidence': 0.9},
+          {
+            'field': 'f15',
+            'value': 'true',
+            'valueType': 'boolean',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f16',
+            'value': 'true',
+            'valueType': 'bool',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f17',
+            'value': 'hello',
+            'valueType': 'string',
+            'confidence': 0.9
+          },
+          {
+            'field': 'f18',
+            'value': 'hello',
+            'valueType': 'unknown_type',
+            'confidence': 0.9
+          },
         ],
       });
 
@@ -394,17 +474,19 @@ void main() {
 
     test('CommonFieldDefinitions constants', () {
       expect(CommonFieldDefinitions.amount.name, equals('amount'));
-      expect(
-          CommonFieldDefinitions.amount.valueType, equals(FragmentValueType.currency));
+      expect(CommonFieldDefinitions.amount.valueType,
+          equals(FragmentValueType.currency));
 
       expect(CommonFieldDefinitions.date.name, equals('date'));
-      expect(CommonFieldDefinitions.date.valueType, equals(FragmentValueType.date));
+      expect(CommonFieldDefinitions.date.valueType,
+          equals(FragmentValueType.date));
 
       expect(CommonFieldDefinitions.merchant.name, equals('merchant'));
-      expect(
-          CommonFieldDefinitions.merchant.valueType, equals(FragmentValueType.string));
+      expect(CommonFieldDefinitions.merchant.valueType,
+          equals(FragmentValueType.string));
 
-      expect(CommonFieldDefinitions.invoiceNumber.name, equals('invoiceNumber'));
+      expect(
+          CommonFieldDefinitions.invoiceNumber.name, equals('invoiceNumber'));
       expect(CommonFieldDefinitions.taxAmount.name, equals('taxAmount'));
       expect(CommonFieldDefinitions.subtotal.name, equals('subtotal'));
 
@@ -412,7 +494,14 @@ void main() {
       expect(CommonFieldDefinitions.invoiceFields.length, equals(6));
       expect(
         CommonFieldDefinitions.invoiceFields.map((f) => f.name).toList(),
-        equals(['amount', 'date', 'merchant', 'invoiceNumber', 'taxAmount', 'subtotal']),
+        equals([
+          'amount',
+          'date',
+          'merchant',
+          'invoiceNumber',
+          'taxAmount',
+          'subtotal'
+        ]),
       );
     });
 
@@ -511,7 +600,9 @@ void main() {
       expect(result.first.fields['valueType'], equals('string'));
     });
 
-    test('extract with both fields and matching rules builds descriptions from rules', () async {
+    test(
+        'extract with both fields and matching rules builds descriptions from rules',
+        () async {
       // This test covers _buildFieldDescriptions lines 191-195:
       // when fields AND rules are both provided and a field matches a rule.
       mockLlm.responseContent = jsonEncode({
@@ -565,7 +656,8 @@ void main() {
       expect(mockLlm.callCount, equals(1));
     });
 
-    test('extract with fields and rules where rule has non-empty pattern', () async {
+    test('extract with fields and rules where rule has non-empty pattern',
+        () async {
       // Specifically exercises line 195: buffer.writeln('  Pattern hint: ...')
       mockLlm.responseContent = jsonEncode({
         'extractions': [

@@ -47,6 +47,9 @@ class IngestOptions {
   /// Extract and store images/audio as assets.
   final bool storeAssets;
 
+  /// Workspace the emitted Evidence belongs to.
+  final String workspaceId;
+
   // === Chunking ===
 
   /// Chunking strategy.
@@ -83,6 +86,7 @@ class IngestOptions {
     this.enableVision = false,
     this.enableLlmVision = false,
     this.storeAssets = true,
+    this.workspaceId = 'default',
     this.chunkingStrategy = ChunkingStrategy.paragraph,
     this.chunkOptions = const ChunkOptions(),
     this.extractFragments = false,
@@ -150,6 +154,7 @@ class IngestOptions {
     bool? enableVision,
     bool? enableLlmVision,
     bool? storeAssets,
+    String? workspaceId,
     bool? extractFragments,
     ChunkingStrategy? chunkingStrategy,
     ChunkOptions? chunkOptions,
@@ -165,6 +170,7 @@ class IngestOptions {
       enableVision: enableVision ?? this.enableVision,
       enableLlmVision: enableLlmVision ?? this.enableLlmVision,
       storeAssets: storeAssets ?? this.storeAssets,
+      workspaceId: workspaceId ?? this.workspaceId,
       extractFragments: extractFragments ?? this.extractFragments,
       chunkingStrategy: chunkingStrategy ?? this.chunkingStrategy,
       chunkOptions: chunkOptions ?? this.chunkOptions,
@@ -184,6 +190,7 @@ class IngestOptionsBuilder {
   bool _enableVision = false;
   bool _enableLlmVision = false;
   bool _storeAssets = true;
+  String _workspaceId = 'default';
   bool _extractFragments = false;
   ChunkingStrategy _chunkingStrategy = ChunkingStrategy.paragraph;
   ChunkOptions _chunkOptions = const ChunkOptions();
@@ -210,6 +217,11 @@ class IngestOptionsBuilder {
 
   IngestOptionsBuilder enableLlmVision([bool value = true]) {
     _enableLlmVision = value;
+    return this;
+  }
+
+  IngestOptionsBuilder workspaceId(String value) {
+    _workspaceId = value;
     return this;
   }
 
@@ -264,6 +276,7 @@ class IngestOptionsBuilder {
         enableVision: _enableVision,
         enableLlmVision: _enableLlmVision,
         storeAssets: _storeAssets,
+        workspaceId: _workspaceId,
         extractFragments: _extractFragments,
         chunkingStrategy: _chunkingStrategy,
         chunkOptions: _chunkOptions,

@@ -91,7 +91,8 @@ class OfficeExtractor extends Extractor {
       throw ExtractionException(id, 'Missing document.xml');
     }
 
-    final doc = XmlDocument.parse(utf8.decode(documentXml.content as List<int>));
+    final doc =
+        XmlDocument.parse(utf8.decode(documentXml.content as List<int>));
     final parts = <DocumentPart>[];
     final structure = <StructureNode>[];
     var partIndex = 0;
@@ -142,7 +143,8 @@ class OfficeExtractor extends Extractor {
     return NormalizedDocument(
       id: const Uuid().v4(),
       metadata: DocumentMetadata(
-        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        mimeType:
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         sha256: hash,
         fileSize: originalBytes.length,
       ),
@@ -193,11 +195,8 @@ class OfficeExtractor extends Extractor {
       final cells = <TableCell>[];
 
       for (final tc in tr.findAllElements('w:tc')) {
-        final text = tc
-            .findAllElements('w:t')
-            .map((e) => e.innerText)
-            .join(' ')
-            .trim();
+        final text =
+            tc.findAllElements('w:t').map((e) => e.innerText).join(' ').trim();
         cells.add(TableCell(text: text));
       }
 
@@ -236,7 +235,8 @@ class OfficeExtractor extends Extractor {
       final sheetFile = archive.findFile('xl/worksheets/sheet$sheetIndex.xml');
       if (sheetFile == null) break;
 
-      final sheetName = _getSheetName(archive, sheetIndex) ?? 'Sheet $sheetIndex';
+      final sheetName =
+          _getSheetName(archive, sheetIndex) ?? 'Sheet $sheetIndex';
       final table = _parseSheet(sheetFile, sharedStrings);
 
       if (table.isNotEmpty) {
@@ -267,7 +267,8 @@ class OfficeExtractor extends Extractor {
     return NormalizedDocument(
       id: const Uuid().v4(),
       metadata: DocumentMetadata(
-        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        mimeType:
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         sha256: hash,
         fileSize: originalBytes.length,
       ),
@@ -286,7 +287,8 @@ class OfficeExtractor extends Extractor {
     final sharedStringsFile = archive.findFile('xl/sharedStrings.xml');
     if (sharedStringsFile == null) return [];
 
-    final doc = XmlDocument.parse(utf8.decode(sharedStringsFile.content as List<int>));
+    final doc =
+        XmlDocument.parse(utf8.decode(sharedStringsFile.content as List<int>));
     return doc
         .findAllElements('si')
         .map((si) => si.findAllElements('t').map((t) => t.innerText).join())
@@ -297,7 +299,8 @@ class OfficeExtractor extends Extractor {
     final workbookFile = archive.findFile('xl/workbook.xml');
     if (workbookFile == null) return null;
 
-    final doc = XmlDocument.parse(utf8.decode(workbookFile.content as List<int>));
+    final doc =
+        XmlDocument.parse(utf8.decode(workbookFile.content as List<int>));
     final sheets = doc.findAllElements('sheet').toList();
 
     if (sheetIndex > 0 && sheetIndex <= sheets.length) {
@@ -306,7 +309,8 @@ class OfficeExtractor extends Extractor {
     return null;
   }
 
-  List<TableRow> _parseSheet(ArchiveFile sheetFile, List<String> sharedStrings) {
+  List<TableRow> _parseSheet(
+      ArchiveFile sheetFile, List<String> sharedStrings) {
     final doc = XmlDocument.parse(utf8.decode(sheetFile.content as List<int>));
     final rows = <TableRow>[];
 
@@ -352,7 +356,8 @@ class OfficeExtractor extends Extractor {
       if (slideFile == null) break;
 
       final slidePartIds = <String>[];
-      final doc = XmlDocument.parse(utf8.decode(slideFile.content as List<int>));
+      final doc =
+          XmlDocument.parse(utf8.decode(slideFile.content as List<int>));
 
       // Extract text from shapes
       for (final text in doc.findAllElements('a:t')) {
@@ -385,7 +390,8 @@ class OfficeExtractor extends Extractor {
     return NormalizedDocument(
       id: const Uuid().v4(),
       metadata: DocumentMetadata(
-        mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        mimeType:
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         sha256: hash,
         fileSize: originalBytes.length,
         pageCount: slideNum - 1,

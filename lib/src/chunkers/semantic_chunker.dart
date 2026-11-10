@@ -113,7 +113,8 @@ class SemanticChunker implements Chunker {
             id: 'chunk_${chunks.length}',
             text: chunkText,
             sourceSpans: spans,
-            location: SourceLocation(charOffset: start, charLength: split - start),
+            location:
+                SourceLocation(charOffset: start, charLength: split - start),
             index: chunks.length,
             totalChunks: 0,
             metadata: {
@@ -137,7 +138,8 @@ class SemanticChunker implements Chunker {
           id: 'chunk_${chunks.length}',
           text: chunkText,
           sourceSpans: spans,
-          location: SourceLocation(charOffset: start, charLength: fullText.length - start),
+          location: SourceLocation(
+              charOffset: start, charLength: fullText.length - start),
           index: chunks.length,
           totalChunks: 0,
           metadata: {
@@ -236,7 +238,6 @@ class SemanticChunker implements Chunker {
       AudioBlock(:final transcript) => transcript ?? '',
     };
   }
-
 }
 
 /// Internal class for tracking part offsets in full text.

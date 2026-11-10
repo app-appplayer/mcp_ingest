@@ -91,14 +91,10 @@ class ImageExtractor extends Extractor {
         bytes[1] == 0x50 &&
         bytes[2] == 0x4E &&
         bytes[3] == 0x47) {
-      final width = (bytes[16] << 24) |
-          (bytes[17] << 16) |
-          (bytes[18] << 8) |
-          bytes[19];
-      final height = (bytes[20] << 24) |
-          (bytes[21] << 16) |
-          (bytes[22] << 8) |
-          bytes[23];
+      final width =
+          (bytes[16] << 24) | (bytes[17] << 16) | (bytes[18] << 8) | bytes[19];
+      final height =
+          (bytes[20] << 24) | (bytes[21] << 16) | (bytes[22] << 8) | bytes[23];
       return _ImageInfo(
         width: width,
         height: height,

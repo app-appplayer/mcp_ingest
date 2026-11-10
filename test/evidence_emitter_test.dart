@@ -12,8 +12,7 @@ NormalizedDocument _createDoc({
 }) {
   return NormalizedDocument(
     id: id,
-    metadata:
-        const DocumentMetadata(mimeType: 'text/plain', sha256: 'abc123'),
+    metadata: const DocumentMetadata(mimeType: 'text/plain', sha256: 'abc123'),
     parts: [TextBlock(id: 'p1', text: text)],
     structure: DocumentStructure.empty,
     provenance: ExtractionProvenance(
@@ -22,19 +21,6 @@ NormalizedDocument _createDoc({
       extractedAt: DateTime(2024, 1, 1),
       extractionDuration: Duration.zero,
     ),
-  );
-}
-
-IngestInput _createInput({
-  String? filename = 'test.txt',
-  String? mimeType = 'text/plain',
-  String? sourceUri = 'file:///test.txt',
-  String content = 'Hello world',
-}) {
-  return IngestInput.fromString(
-    content,
-    filename: filename,
-    mimeType: mimeType ?? 'text/plain',
   );
 }
 
@@ -144,8 +130,7 @@ void main() {
       expect(evidence.content, equals('A' * 50));
     });
 
-    test('returns document.id as content when includeFullContent is false',
-        () {
+    test('returns document.id as content when includeFullContent is false', () {
       final emitter = EvidenceEmitter(
         config: const EvidenceEmitterConfig(includeFullContent: false),
       );
@@ -222,7 +207,9 @@ void main() {
         expect(evidence.sourceType, equals(EvidenceSourceType.image));
       });
 
-      test('application/json maps to text because isText includes text-based mimes', () {
+      test(
+          'application/json maps to text because isText includes text-based mimes',
+          () {
         // application/json is in ContentType._textBasedMimes, so isText is true,
         // and _mapSourceType checks isText before json/xml content check.
         final emitter = EvidenceEmitter();
@@ -238,7 +225,9 @@ void main() {
         expect(evidence.sourceType, equals(EvidenceSourceType.text));
       });
 
-      test('application/xml maps to text because isText includes text-based mimes', () {
+      test(
+          'application/xml maps to text because isText includes text-based mimes',
+          () {
         // application/xml is in ContentType._textBasedMimes, so isText is true.
         final emitter = EvidenceEmitter();
         final doc = _createDoc();
@@ -386,8 +375,7 @@ void main() {
       expect(evidence.source.name, equals('My Document Title'));
     });
 
-    test('source name falls back to document id when no filename or title',
-        () {
+    test('source name falls back to document id when no filename or title', () {
       final emitter = EvidenceEmitter();
       final doc = _createDoc(id: 'fallback-doc-id');
       final input = IngestInput(
@@ -492,8 +480,7 @@ void main() {
       expect(evidence.sourceType, equals(EvidenceSourceType.text));
     });
 
-    test(
-        'falls back to application/octet-stream when no mimeType or filename',
+    test('falls back to application/octet-stream when no mimeType or filename',
         () {
       final emitter = EvidenceEmitter();
       final doc = _createDoc();
@@ -762,15 +749,13 @@ void main() {
         mimeType: 'text/plain',
       );
 
-      final itemStream = Stream<(NormalizedDocument, IngestInput, ContentType?)>
-          .fromIterable([
+      final itemStream =
+          Stream<(NormalizedDocument, IngestInput, ContentType?)>.fromIterable([
         (doc1, input1, null),
         (doc2, input2, null),
       ]);
 
-      final results = await batchEmitter
-          .emitStream(items: itemStream)
-          .toList();
+      final results = await batchEmitter.emitStream(items: itemStream).toList();
 
       expect(results, hasLength(2));
       expect(results[0].content, contains('Stream doc 1'));
@@ -789,8 +774,9 @@ void main() {
         mimeType: 'text/plain',
       );
 
-      final itemStream = Stream<(NormalizedDocument, IngestInput, ContentType?)>
-          .fromIterable([(doc, input, null)]);
+      final itemStream =
+          Stream<(NormalizedDocument, IngestInput, ContentType?)>.fromIterable(
+              [(doc, input, null)]);
 
       final results = await batchEmitter
           .emitStream(items: itemStream, workspaceId: 'stream-ws')
@@ -802,12 +788,11 @@ void main() {
     test('emitStream handles empty stream', () async {
       final batchEmitter = BatchEvidenceEmitter();
 
-      final itemStream = Stream<
-          (NormalizedDocument, IngestInput, ContentType?)>.fromIterable([]);
+      final itemStream =
+          Stream<(NormalizedDocument, IngestInput, ContentType?)>.fromIterable(
+              []);
 
-      final results = await batchEmitter
-          .emitStream(items: itemStream)
-          .toList();
+      final results = await batchEmitter.emitStream(items: itemStream).toList();
 
       expect(results, isEmpty);
     });

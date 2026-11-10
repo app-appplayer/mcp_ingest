@@ -44,12 +44,16 @@ class FragmentExtractor {
         'field': rule.field,
         'value': part.value,
         'key': part.key,
-        if (part.normalizedValue != null) 'normalizedValue': part.normalizedValue,
-        if (part.location != null) 'position': {
-          'start': part.location!.charOffset ?? 0,
-          'end': (part.location!.charOffset ?? 0) + (part.location!.charLength ?? 0),
-          if (part.location!.lineNumber != null) 'line': part.location!.lineNumber,
-        },
+        if (part.normalizedValue != null)
+          'normalizedValue': part.normalizedValue,
+        if (part.location != null)
+          'position': {
+            'start': part.location!.charOffset ?? 0,
+            'end': (part.location!.charOffset ?? 0) +
+                (part.location!.charLength ?? 0),
+            if (part.location!.lineNumber != null)
+              'line': part.location!.lineNumber,
+          },
       },
       confidence: part.confidence,
       extractor: ExtractorType.rule,

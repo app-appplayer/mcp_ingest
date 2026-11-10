@@ -155,7 +155,8 @@ class CostBudget {
   }
 
   /// Estimate cost for LLM Vision operation.
-  double estimateLlmVisionCost(int calls, {int inputTokens = 0, int outputTokens = 0}) {
+  double estimateLlmVisionCost(int calls,
+      {int inputTokens = 0, int outputTokens = 0}) {
     return calls * PortUsageTracker.llmVisionCostPerCall +
         (inputTokens / 1000) * PortUsageTracker.llmInputCostPer1K +
         (outputTokens / 1000) * PortUsageTracker.llmOutputCostPer1K;
@@ -187,7 +188,8 @@ class CostBudget {
 
   /// Check if LLM operation would fit in budget.
   bool canAffordLlm(int calls, {int inputTokens = 0, int outputTokens = 0}) {
-    final cost = estimateLlmVisionCost(calls, inputTokens: inputTokens, outputTokens: outputTokens);
+    final cost = estimateLlmVisionCost(calls,
+        inputTokens: inputTokens, outputTokens: outputTokens);
     return _canAfford(cost, llmCost, maxLlmBudget, 'LLM');
   }
 
@@ -237,7 +239,8 @@ class CostBudget {
 
   /// Check LLM budget and throw if exceeded.
   void checkLlmBudget(int calls, {int inputTokens = 0, int outputTokens = 0}) {
-    final cost = estimateLlmVisionCost(calls, inputTokens: inputTokens, outputTokens: outputTokens);
+    final cost = estimateLlmVisionCost(calls,
+        inputTokens: inputTokens, outputTokens: outputTokens);
     _checkBudget(cost, llmCost, maxLlmBudget, 'LLM');
     _checkTotalBudget(cost, 'LLM');
   }
@@ -280,7 +283,8 @@ class CostBudget {
 
   /// Record ASR usage.
   void recordAsr({required Duration audioDuration, Duration? processingTime}) {
-    _tracker.recordAsr(audioDuration: audioDuration, processingTime: processingTime);
+    _tracker.recordAsr(
+        audioDuration: audioDuration, processingTime: processingTime);
   }
 
   /// Record Vision usage.
@@ -290,7 +294,8 @@ class CostBudget {
 
   /// Record LLM usage.
   void recordLlm({int calls = 1, int inputTokens = 0, int outputTokens = 0}) {
-    _tracker.recordLlmVision(calls: calls, inputTokens: inputTokens, outputTokens: outputTokens);
+    _tracker.recordLlmVision(
+        calls: calls, inputTokens: inputTokens, outputTokens: outputTokens);
   }
 
   /// Record storage usage.

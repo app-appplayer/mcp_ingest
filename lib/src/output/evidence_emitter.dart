@@ -68,7 +68,8 @@ class EvidenceEmitter {
       ingestedAt: now,
       status: EvidenceStatus.extracted,
       fragmentIds: const [],
-      metadata: _buildMetadata(document, input, detectedType, additionalMetadata),
+      metadata:
+          _buildMetadata(document, input, detectedType, additionalMetadata),
     );
   }
 
@@ -81,8 +82,8 @@ class EvidenceEmitter {
     final bytes = await input.collectBytes();
     final content = base64Encode(bytes);
     final contentHash = config.computeHash ? _computeHash(content) : '';
-    final contentType = ContentTypeDetector.detect(bytes, input.filename)
-        ?? const ContentType('application/octet-stream');
+    final contentType = ContentTypeDetector.detect(bytes, input.filename) ??
+        const ContentType('application/octet-stream');
 
     final now = DateTime.now();
     return Evidence(
@@ -131,7 +132,8 @@ class EvidenceEmitter {
 
   /// Generate evidence ID.
   String _generateEvidenceId(NormalizedDocument document, IngestInput input) {
-    final uniqueData = '${document.id}:${input.sourceUri ?? ''}:${DateTime.now().millisecondsSinceEpoch}';
+    final uniqueData =
+        '${document.id}:${input.sourceUri ?? ''}:${DateTime.now().millisecondsSinceEpoch}';
     final hash = _computeHash(uniqueData);
     return 'ev_${hash.substring(0, 12)}';
   }
@@ -203,7 +205,8 @@ class BatchEvidenceEmitter {
   final EvidenceEmitter _emitter;
 
   BatchEvidenceEmitter({EvidenceEmitterConfig? config})
-      : _emitter = EvidenceEmitter(config: config ?? EvidenceEmitterConfig.defaults);
+      : _emitter =
+            EvidenceEmitter(config: config ?? EvidenceEmitterConfig.defaults);
 
   /// Emit evidence for multiple documents.
   List<Evidence> emitBatch({

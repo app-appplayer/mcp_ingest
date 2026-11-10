@@ -16,7 +16,8 @@ class FixedSizeChunker implements Chunker {
   String get name => 'Fixed Size Chunker';
 
   @override
-  Future<List<Chunk>> chunk(NormalizedDocument document, ChunkOptions options) async {
+  Future<List<Chunk>> chunk(
+      NormalizedDocument document, ChunkOptions options) async {
     final fullText = document.fullText;
     if (fullText.isEmpty) return [];
 

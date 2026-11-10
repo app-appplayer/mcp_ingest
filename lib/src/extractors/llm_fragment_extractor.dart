@@ -34,6 +34,7 @@ class LlmFragmentExtractor {
     String evidenceId, {
     List<String>? fields,
     List<FragmentRule>? rules,
+    String workspaceId = 'default',
   }) async {
     final fullText = document.fullText;
     if (fullText.trim().isEmpty) return [];
@@ -80,15 +81,16 @@ Return JSON with the extractions.''',
     ));
 
     // Parse LLM response
-    return _parseExtractions(response.content, evidenceId);
+    return _parseExtractions(response.content, evidenceId, workspaceId);
   }
 
   /// Extract specific field types from document.
   Future<List<Fragment>> extractFields(
     NormalizedDocument document,
     String evidenceId,
-    List<FieldDefinition> fieldDefs,
-  ) async {
+    List<FieldDefinition> fieldDefs, {
+    String workspaceId = 'default',
+  }) async {
     final fullText = document.fullText;
     if (fullText.trim().isEmpty) return [];
 
@@ -135,15 +137,16 @@ Return JSON with the extractions.''',
       responseFormat: 'json',
     ));
 
-    return _parseExtractions(response.content, evidenceId);
+    return _parseExtractions(response.content, evidenceId, workspaceId);
   }
 
   /// Extract fragments matching a specific schema.
   Future<List<Fragment>> extractWithSchema(
     NormalizedDocument document,
     String evidenceId,
-    Map<String, dynamic> schema,
-  ) async {
+    Map<String, dynamic> schema, {
+    String workspaceId = 'default',
+  }) async {
     final fullText = document.fullText;
     if (fullText.trim().isEmpty) return [];
 
@@ -180,10 +183,11 @@ Return JSON with the extractions.''',
       responseFormat: 'json',
     ));
 
-    return _parseExtractions(response.content, evidenceId);
+    return _parseExtractions(response.content, evidenceId, workspaceId);
   }
 
-  String _buildFieldDescriptions(List<String>? fields, List<FragmentRule>? rules) {
+  String _buildFieldDescriptions(
+      List<String>? fields, List<FragmentRule>? rules) {
     final buffer = StringBuffer();
 
     if (fields != null) {
@@ -216,7 +220,11 @@ Return JSON with the extractions.''',
     return buffer.toString();
   }
 
-  List<Fragment> _parseExtractions(String response, String evidenceId) {
+  List<Fragment> _parseExtractions(
+    String response,
+    String evidenceId, [
+    String workspaceId = 'default',
+  ]) {
     try {
       final jsonStr = _extractJson(response);
       final json = jsonDecode(jsonStr) as Map<String, dynamic>;
@@ -236,13 +244,14 @@ Return JSON with the extractions.''',
 
         final normalizedValue = extraction['normalizedValue']?.toString();
         final valueTypeStr = extraction['valueType'] as String? ?? 'string';
-        final confidence = (extraction['confidence'] as num?)?.toDouble() ?? 0.5;
+        final confidence =
+            (extraction['confidence'] as num?)?.toDouble() ?? 0.5;
         final position = extraction['position'] as Map<String, dynamic>?;
 
         fragments.add(Fragment(
           fragmentId: uuid.v4(),
           evidenceId: evidenceId,
-          workspaceId: 'default',
+          workspaceId: workspaceId,
           fields: {
             'field': field,
             'value': value,
@@ -279,7 +288,12 @@ Return JSON with the extractions.''',
 
   FragmentValueType _parseValueType(String typeStr) {
     return switch (typeStr.toLowerCase()) {
-      'number' || 'int' || 'integer' || 'float' || 'double' => FragmentValueType.number,
+      'number' ||
+      'int' ||
+      'integer' ||
+      'float' ||
+      'double' =>
+        FragmentValueType.number,
       'date' || 'datetime' || 'time' => FragmentValueType.date,
       'currency' || 'money' || 'amount' => FragmentValueType.currency,
       'percentage' || 'percent' || '%' => FragmentValueType.percentage,

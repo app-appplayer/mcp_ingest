@@ -234,8 +234,8 @@ void main() {
       expect(restored.text, equals(original.text));
       expect(restored.type, equals(original.type));
       expect(restored.language, equals(original.language));
-      expect(restored.location!.pageNumber,
-          equals(original.location!.pageNumber));
+      expect(
+          restored.location!.pageNumber, equals(original.location!.pageNumber));
       expect(restored.metadata!['key'], equals('val'));
       expect(restored.spans!.length, equals(1));
       expect(restored.spans!.first.value, equals('https://x.com'));
@@ -655,7 +655,9 @@ void main() {
     test('copyWith preserves caption when not specified', () {
       const original = TableBlock(
         id: 't_cap',
-        rows: [TableRow(cells: [TableCell(text: 'A')])],
+        rows: [
+          TableRow(cells: [TableCell(text: 'A')])
+        ],
         rowCount: 1,
         columnCount: 1,
         caption: 'Original caption',
@@ -880,7 +882,8 @@ void main() {
         items: [ListItem(text: 'Item')],
         startNumber: null,
       );
-      final modified = original.copyWith(type: ListType.ordered, startNumber: 5);
+      final modified =
+          original.copyWith(type: ListType.ordered, startNumber: 5);
       expect(modified.id, equals('lc'));
       expect(modified.type, equals(ListType.ordered));
       expect(modified.startNumber, equals(5));

@@ -133,10 +133,7 @@ class JsonExtractor extends Extractor {
   }
 
   bool _isLeafValue(dynamic value) {
-    return value == null ||
-        value is String ||
-        value is num ||
-        value is bool;
+    return value == null || value is String || value is num || value is bool;
   }
 
   FragmentValueType _inferType(dynamic value) {

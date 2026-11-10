@@ -256,7 +256,8 @@ class FragmentEmitter {
     final str = value.toString().trim();
 
     // Try parsing as number
-    final numValue = double.tryParse(str.replaceAll(',', '').replaceAll(r'$', ''));
+    final numValue =
+        double.tryParse(str.replaceAll(',', '').replaceAll(r'$', ''));
     if (numValue != null) return numValue;
 
     // Try parsing as date
@@ -317,7 +318,8 @@ class BatchFragmentEmitter {
   final FragmentEmitter _emitter;
 
   BatchFragmentEmitter({FragmentEmitterConfig? config})
-      : _emitter = FragmentEmitter(config: config ?? FragmentEmitterConfig.defaults);
+      : _emitter =
+            FragmentEmitter(config: config ?? FragmentEmitterConfig.defaults);
 
   /// Emit fragments for multiple documents.
   Map<String, List<Fragment>> emitBatch({

@@ -1136,7 +1136,9 @@ void main() {
     test('copyWith preserves values', () {
       const original = TableBlock(
         id: 't1',
-        rows: [TableRow(cells: [TableCell(text: 'A')])],
+        rows: [
+          TableRow(cells: [TableCell(text: 'A')])
+        ],
         rowCount: 1,
         columnCount: 1,
         caption: 'Original',

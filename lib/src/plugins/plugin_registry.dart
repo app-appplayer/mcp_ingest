@@ -124,4 +124,3 @@ class PluginRegistry {
     return registry;
   }
 }
-

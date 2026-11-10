@@ -4,6 +4,7 @@ library;
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:archive/archive.dart' show ZLibDecoder;
 import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 
@@ -118,27 +119,63 @@ class PdfExtractor extends Extractor {
     final content = StringBuffer();
     final text = latin1.decode(bytes, allowInvalid: true);
 
-    // Find and extract text from stream objects
-    final streamPattern = RegExp(r'stream\s*([\s\S]*?)\s*endstream');
-    for (final match in streamPattern.allMatches(text)) {
-      final streamContent = match.group(1) ?? '';
+    // Stream objects: Flate-compressed streams are inflated first, the rest
+    // are read as they are. Latin-1 maps one character to one byte, so match
+    // positions in [text] are byte offsets into [bytes].
+    final streams = <String>[];
+    for (final match in _streamStart.allMatches(text)) {
+      final start = match.end;
+      final end = text.indexOf('endstream', start);
+      if (end < 0) break;
+      final objStart = text.lastIndexOf('obj', match.start);
+      final dictionary =
+          text.substring(objStart < 0 ? 0 : objStart, match.start);
+      var raw = bytes.sublist(start, end);
+      while (raw.isNotEmpty && (raw.last == 0x0A || raw.last == 0x0D)) {
+        raw = raw.sublist(0, raw.length - 1);
+      }
+      if (dictionary.contains('/FlateDecode')) {
+        final inflated = _inflate(raw);
+        // A stream that cannot be inflated holds no readable text.
+        if (inflated == null) continue;
+        streams.add(latin1.decode(inflated, allowInvalid: true));
+      } else {
+        streams.add(latin1.decode(raw, allowInvalid: true));
+      }
+    }
+
+    for (final streamContent in streams) {
       final textContent = _extractReadableText(streamContent);
       if (textContent.isNotEmpty) {
         content.writeln(textContent);
       }
     }
 
-    // Also look for text between BT (Begin Text) and ET (End Text)
+    // Also look for text between BT (Begin Text) and ET (End Text), in the
+    // file body and in every (inflated) stream.
     final btPattern = RegExp(r'BT\s*([\s\S]*?)\s*ET');
-    for (final match in btPattern.allMatches(text)) {
-      final textBlock = match.group(1) ?? '';
-      final extracted = _extractTextOperators(textBlock);
-      if (extracted.isNotEmpty) {
-        content.writeln(extracted);
+    for (final source in [text, ...streams]) {
+      for (final match in btPattern.allMatches(source)) {
+        final textBlock = match.group(1) ?? '';
+        final extracted = _extractTextOperators(textBlock);
+        if (extracted.isNotEmpty) {
+          content.writeln(extracted);
+        }
       }
     }
 
     return content.toString();
+  }
+
+  /// `stream` keyword followed by its line end (not the one in `endstream`).
+  static final RegExp _streamStart = RegExp(r'(?<!end)stream\r?\n');
+
+  List<int>? _inflate(List<int> data) {
+    try {
+      return ZLibDecoder().decodeBytes(data);
+    } catch (_) {
+      return null;
+    }
   }
 
   String _extractReadableText(String content) {

@@ -2,9 +2,6 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 import 'package:mcp_ingest/mcp_ingest.dart';
-import 'package:mcp_ingest/src/plugins/pdfium_pdf_plugin.dart';
-import 'package:mcp_ingest/src/plugins/tesseract_ocr_plugin.dart';
-import 'package:mcp_ingest/src/plugins/whisper_asr_plugin.dart';
 
 /// Helper to create and chmod a mock shell script.
 Future<String> _createMockScript(
@@ -119,9 +116,9 @@ void main() {
           tempDir,
           'mock_pdftotext',
           '#!/bin/bash\n'
-          'output="\${@: -1}"\n'
-          'echo "Sample extracted text from page." > "\$output"\n'
-          'exit 0\n',
+              'output="\${@: -1}"\n'
+              'echo "Sample extracted text from page." > "\$output"\n'
+              'exit 0\n',
         );
 
         // mock_pdfinfo: outputs standard pdfinfo fields
@@ -129,18 +126,18 @@ void main() {
           tempDir,
           'mock_pdfinfo',
           '#!/bin/bash\n'
-          'if echo "\$@" | grep -q "\\-f"; then\n'
-          '  echo "Page size:      612.0 x 792.0 pts (letter)"\n'
-          'else\n'
-          '  echo "Title:          Test Document"\n'
-          '  echo "Author:         Test Author"\n'
-          '  echo "Subject:        Test Subject"\n'
-          '  echo "Creator:        Test Creator"\n'
-          '  echo "CreationDate:   D:20240115120000"\n'
-          '  echo "ModDate:        D:20240115120000"\n'
-          '  echo "Pages:          2"\n'
-          'fi\n'
-          'exit 0\n',
+              'if echo "\$@" | grep -q "\\-f"; then\n'
+              '  echo "Page size:      612.0 x 792.0 pts (letter)"\n'
+              'else\n'
+              '  echo "Title:          Test Document"\n'
+              '  echo "Author:         Test Author"\n'
+              '  echo "Subject:        Test Subject"\n'
+              '  echo "Creator:        Test Creator"\n'
+              '  echo "CreationDate:   D:20240115120000"\n'
+              '  echo "ModDate:        D:20240115120000"\n'
+              '  echo "Pages:          2"\n'
+              'fi\n'
+              'exit 0\n',
         );
 
         // mock_pdftoppm: creates a minimal PNG file
@@ -148,9 +145,9 @@ void main() {
           tempDir,
           'mock_pdftoppm',
           '#!/bin/bash\n'
-          'output_base="\${@: -1}"\n'
-          "printf '\\x89PNG\\r\\n\\x1a\\n' > \"\${output_base}-001.png\"\n"
-          'exit 0\n',
+              'output_base="\${@: -1}"\n'
+              "printf '\\x89PNG\\r\\n\\x1a\\n' > \"\${output_base}-001.png\"\n"
+              'exit 0\n',
         );
 
         // mock_pdfinfo_fail: exits with code 1
@@ -158,8 +155,8 @@ void main() {
           tempDir,
           'mock_pdfinfo_fail',
           '#!/bin/bash\n'
-          'echo "Error: pdfinfo failed" >&2\n'
-          'exit 1\n',
+              'echo "Error: pdfinfo failed" >&2\n'
+              'exit 1\n',
         );
 
         // mock_pdftoppm_fail: exits with code 1
@@ -167,8 +164,8 @@ void main() {
           tempDir,
           'mock_pdftoppm_fail',
           '#!/bin/bash\n'
-          'echo "Error: render failed" >&2\n'
-          'exit 1\n',
+              'echo "Error: render failed" >&2\n'
+              'exit 1\n',
         );
 
         // mock_pdftoppm_no_output: succeeds but creates no output file
@@ -176,7 +173,7 @@ void main() {
           tempDir,
           'mock_pdftoppm_no_output',
           '#!/bin/bash\n'
-          'exit 0\n',
+              'exit 0\n',
         );
 
         // mock_pdfinfo_no_pages: outputs no Pages line
@@ -184,8 +181,8 @@ void main() {
           tempDir,
           'mock_pdfinfo_no_pages',
           '#!/bin/bash\n'
-          'echo "Title:          No Pages Doc"\n'
-          'exit 0\n',
+              'echo "Title:          No Pages Doc"\n'
+              'exit 0\n',
         );
 
         // mock_pdfinfo_iso_date: outputs ISO date format
@@ -193,16 +190,16 @@ void main() {
           tempDir,
           'mock_pdfinfo_iso_date',
           '#!/bin/bash\n'
-          'if echo "\$@" | grep -q "\\-f"; then\n'
-          '  echo "Page size:      612.0 x 792.0 pts (letter)"\n'
-          'else\n'
-          '  echo "Title:          ISO Date Doc"\n'
-          '  echo "Author:         ISO Author"\n'
-          '  echo "CreationDate:   2024-03-15T10:30:00"\n'
-          '  echo "ModDate:        2024-03-15T10:30:00"\n'
-          '  echo "Pages:          1"\n'
-          'fi\n'
-          'exit 0\n',
+              'if echo "\$@" | grep -q "\\-f"; then\n'
+              '  echo "Page size:      612.0 x 792.0 pts (letter)"\n'
+              'else\n'
+              '  echo "Title:          ISO Date Doc"\n'
+              '  echo "Author:         ISO Author"\n'
+              '  echo "CreationDate:   2024-03-15T10:30:00"\n'
+              '  echo "ModDate:        2024-03-15T10:30:00"\n'
+              '  echo "Pages:          1"\n'
+              'fi\n'
+              'exit 0\n',
         );
 
         // mock_pdfinfo_invalid_date: outputs garbage date
@@ -210,15 +207,15 @@ void main() {
           tempDir,
           'mock_pdfinfo_invalid_date',
           '#!/bin/bash\n'
-          'if echo "\$@" | grep -q "\\-f"; then\n'
-          '  echo "Page size:      612.0 x 792.0 pts (letter)"\n'
-          'else\n'
-          '  echo "Title:          Invalid Date Doc"\n'
-          '  echo "CreationDate:   not-a-date-at-all"\n'
-          '  echo "ModDate:        garbage"\n'
-          '  echo "Pages:          1"\n'
-          'fi\n'
-          'exit 0\n',
+              'if echo "\$@" | grep -q "\\-f"; then\n'
+              '  echo "Page size:      612.0 x 792.0 pts (letter)"\n'
+              'else\n'
+              '  echo "Title:          Invalid Date Doc"\n'
+              '  echo "CreationDate:   not-a-date-at-all"\n'
+              '  echo "ModDate:        garbage"\n'
+              '  echo "Pages:          1"\n'
+              'fi\n'
+              'exit 0\n',
         );
 
         // mock_pdfinfo_no_page_size: no Page size in -f mode
@@ -226,12 +223,12 @@ void main() {
           tempDir,
           'mock_pdfinfo_no_page_size',
           '#!/bin/bash\n'
-          'if echo "\$@" | grep -q "\\-f"; then\n'
-          '  echo "Some other info"\n'
-          'else\n'
-          '  echo "Pages:          1"\n'
-          'fi\n'
-          'exit 0\n',
+              'if echo "\$@" | grep -q "\\-f"; then\n'
+              '  echo "Some other info"\n'
+              'else\n'
+              '  echo "Pages:          1"\n'
+              'fi\n'
+              'exit 0\n',
         );
       });
 
@@ -377,7 +374,7 @@ void main() {
           tempDir,
           'mock_pdftotext_fail',
           '#!/bin/bash\n'
-          'exit 1\n',
+              'exit 1\n',
         );
 
         final plugin = PdfiumPdfPlugin(
@@ -413,19 +410,18 @@ void main() {
         expect(result.pages[0].height, 792.0);
       });
 
-      test(
-          '_getPageDimensions falls back to US Letter when pdfinfo -f fails',
+      test('_getPageDimensions falls back to US Letter when pdfinfo -f fails',
           () async {
         final mockPdfinfoPartial = await _createMockScript(
           tempDir,
           'mock_pdfinfo_partial',
           '#!/bin/bash\n'
-          'if echo "\$@" | grep -q "\\-f"; then\n'
-          '  exit 1\n'
-          'else\n'
-          '  echo "Pages:          1"\n'
-          'fi\n'
-          'exit 0\n',
+              'if echo "\$@" | grep -q "\\-f"; then\n'
+              '  exit 1\n'
+              'else\n'
+              '  echo "Pages:          1"\n'
+              'fi\n'
+              'exit 0\n',
         );
 
         final plugin = PdfiumPdfPlugin(
@@ -497,9 +493,9 @@ void main() {
           tempDir,
           'mock_pdftoppm_ppm',
           '#!/bin/bash\n'
-          'output_base="\${@: -1}"\n'
-          'echo "P6 1 1 255" > "\${output_base}-001.ppm"\n'
-          'exit 0\n',
+              'output_base="\${@: -1}"\n'
+              'echo "P6 1 1 255" > "\${output_base}-001.ppm"\n'
+              'exit 0\n',
         );
 
         final plugin = PdfiumPdfPlugin(pdftoppmPath: mockPdftoppmPpm);
@@ -515,16 +511,15 @@ void main() {
 
       // -- _parseDate edge cases via getMetadata --
 
-      test('getMetadata handles D: prefix date with exactly 8 chars',
-          () async {
+      test('getMetadata handles D: prefix date with exactly 8 chars', () async {
         final mockPdfinfoShortDate = await _createMockScript(
           tempDir,
           'mock_pdfinfo_short_date',
           '#!/bin/bash\n'
-          'echo "Title:          Short Date"\n'
-          'echo "CreationDate:   D:20240301"\n'
-          'echo "Pages:          1"\n'
-          'exit 0\n',
+              'echo "Title:          Short Date"\n'
+              'echo "CreationDate:   D:20240301"\n'
+              'echo "Pages:          1"\n'
+              'exit 0\n',
         );
 
         final plugin = PdfiumPdfPlugin(pdfinfoPath: mockPdfinfoShortDate);
@@ -542,10 +537,10 @@ void main() {
           tempDir,
           'mock_pdfinfo_tiny_date',
           '#!/bin/bash\n'
-          'echo "Title:          Tiny Date"\n'
-          'echo "CreationDate:   D:2024"\n'
-          'echo "Pages:          1"\n'
-          'exit 0\n',
+              'echo "Title:          Tiny Date"\n'
+              'echo "CreationDate:   D:2024"\n'
+              'echo "Pages:          1"\n'
+              'exit 0\n',
         );
 
         final plugin = PdfiumPdfPlugin(pdfinfoPath: mockPdfinfoTinyDate);
@@ -563,8 +558,8 @@ void main() {
           tempDir,
           'mock_pdfinfo_minimal',
           '#!/bin/bash\n'
-          'echo "Pages:          1"\n'
-          'exit 0\n',
+              'echo "Pages:          1"\n'
+              'exit 0\n',
         );
 
         final plugin = PdfiumPdfPlugin(pdfinfoPath: mockPdfinfoMinimal);
@@ -688,8 +683,8 @@ exit 0
 ''');
 
         // Mock tesseract that always fails
-        mockTesseractFail = await _createMockScript(
-            tempDir, 'mock_tesseract_fail', '''
+        mockTesseractFail =
+            await _createMockScript(tempDir, 'mock_tesseract_fail', '''
 #!/bin/bash
 echo "Error: recognition failed" >&2
 exit 1
@@ -712,8 +707,7 @@ exit 1
         expect(langs, equals(['eng', 'fra', 'deu']));
       });
 
-      test('supportedLanguages with dataDir adds --tessdata-dir arg',
-          () async {
+      test('supportedLanguages with dataDir adds --tessdata-dir arg', () async {
         final plugin = TesseractOcrPlugin(
           tesseractPath: mockTesseract,
           dataDir: '/usr/share/tessdata',
@@ -1010,21 +1004,18 @@ exit 0
         // Verify first segment
         expect(result.segments![0].text, 'Hello');
         expect(result.segments![0].startTime, Duration.zero);
-        expect(
-            result.segments![0].endTime, const Duration(milliseconds: 2000));
+        expect(result.segments![0].endTime, const Duration(milliseconds: 2000));
         expect(result.segments![0].confidence, 0.95);
 
         // Verify second segment
         expect(result.segments![1].text, 'world.');
-        expect(result.segments![1].startTime,
-            const Duration(milliseconds: 2000));
         expect(
-            result.segments![1].endTime, const Duration(milliseconds: 5000));
+            result.segments![1].startTime, const Duration(milliseconds: 2000));
+        expect(result.segments![1].endTime, const Duration(milliseconds: 5000));
         expect(result.segments![1].confidence, 0.85);
 
         // Verify audio duration
-        expect(
-            result.audioDuration, const Duration(milliseconds: 5000));
+        expect(result.audioDuration, const Duration(milliseconds: 5000));
 
         // Verify overall confidence is average of segment confidences
         expect(result.confidence, closeTo(0.9, 0.001));

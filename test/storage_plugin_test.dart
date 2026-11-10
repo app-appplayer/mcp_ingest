@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:test/test.dart';
 import 'package:mcp_ingest/mcp_ingest.dart';
-import 'package:mcp_bundle/ports.dart' show StorageOptions;
 
 void main() {
   late Directory tempDir;
@@ -23,11 +22,6 @@ void main() {
   /// Helper to create a byte stream from a string.
   Stream<List<int>> streamFromString(String s) {
     return Stream.value(Uint8List.fromList(s.codeUnits));
-  }
-
-  /// Helper to create a byte stream from bytes.
-  Stream<List<int>> streamFromBytes(Uint8List bytes) {
-    return Stream.value(bytes);
   }
 
   group('LocalStoragePlugin', () {
@@ -102,8 +96,7 @@ void main() {
         streamFromString('fake png'),
         'image/png',
       );
-      final pngFile =
-          File('${tempDir.path}/$pngKey.png');
+      final pngFile = File('${tempDir.path}/$pngKey.png');
       expect(pngFile.existsSync(), isTrue);
 
       // text/plain -> .txt
@@ -111,8 +104,7 @@ void main() {
         streamFromString('plain text'),
         'text/plain',
       );
-      final txtFile =
-          File('${tempDir.path}/$txtKey.txt');
+      final txtFile = File('${tempDir.path}/$txtKey.txt');
       expect(txtFile.existsSync(), isTrue);
 
       // unknown type -> .bin
@@ -120,8 +112,7 @@ void main() {
         streamFromString('binary stuff'),
         'application/x-custom',
       );
-      final binFile =
-          File('${tempDir.path}/$binKey.bin');
+      final binFile = File('${tempDir.path}/$binKey.bin');
       expect(binFile.existsSync(), isTrue);
     });
 
@@ -323,7 +314,9 @@ void main() {
       expect(meta!.expiresAt, isNull);
     });
 
-    test('metadata falls back to DateTime.now when createdAt missing from meta file', () async {
+    test(
+        'metadata falls back to DateTime.now when createdAt missing from meta file',
+        () async {
       final content = 'test for missing createdAt';
       final key = await plugin.store(
         streamFromString(content),
@@ -334,7 +327,8 @@ void main() {
       final metaFile = File('${tempDir.path}/$key.txt.meta');
       expect(metaFile.existsSync(), isTrue);
       final original = metaFile.readAsStringSync();
-      final lines = original.split('\n').where((l) => !l.startsWith('createdAt='));
+      final lines =
+          original.split('\n').where((l) => !l.startsWith('createdAt='));
       metaFile.writeAsStringSync(lines.join('\n'));
 
       final before = DateTime.now();
@@ -342,8 +336,11 @@ void main() {
       final after = DateTime.now();
       expect(meta, isNotNull);
       // createdAt should be approximately now since the fallback uses DateTime.now()
-      expect(meta!.createdAt.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
-      expect(meta.createdAt.isBefore(after.add(const Duration(seconds: 1))), isTrue);
+      expect(
+          meta!.createdAt.isAfter(before.subtract(const Duration(seconds: 1))),
+          isTrue);
+      expect(meta.createdAt.isBefore(after.add(const Duration(seconds: 1))),
+          isTrue);
     });
   });
 }

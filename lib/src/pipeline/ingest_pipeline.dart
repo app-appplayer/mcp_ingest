@@ -353,18 +353,20 @@ class IngestPipeline {
             Stream.value(bytes),
             AsrOptions(language: context.options.language ?? 'en'),
           );
-          context.updatePart(part.id, part.copyWith(
-            transcript: result.text,
-            segments: result.segments
-                ?.map((s) => TranscriptSegment(
-                      startTime: s.startTime,
-                      endTime: s.endTime,
-                      text: s.text,
-                      confidence: s.confidence,
-                      speaker: s.speakerId,
-                    ))
-                .toList(),
-          ));
+          context.updatePart(
+              part.id,
+              part.copyWith(
+                transcript: result.text,
+                segments: result.segments
+                    ?.map((s) => TranscriptSegment(
+                          startTime: s.startTime,
+                          endTime: s.endTime,
+                          text: s.text,
+                          confidence: s.confidence,
+                          speaker: s.speakerId,
+                        ))
+                    .toList(),
+              ));
           context.incrementAsrCalls();
         } catch (e) {
           context.addWarning('ASR failed for ${part.id}: $e');
@@ -386,9 +388,11 @@ class IngestPipeline {
             Stream.value(bytes),
             const VisionOptions(),
           );
-          context.updatePart(part.id, part.copyWith(
-            visionDescription: result.description,
-          ));
+          context.updatePart(
+              part.id,
+              part.copyWith(
+                visionDescription: result.description,
+              ));
           context.incrementVisionPortCalls();
         } catch (e) {
           context.addWarning('Vision failed for ${part.id}: $e');
@@ -416,9 +420,11 @@ class IngestPipeline {
             ],
             temperature: 0.0,
           ));
-          context.updatePart(part.id, part.copyWith(
-            visionDescription: response.content,
-          ));
+          context.updatePart(
+              part.id,
+              part.copyWith(
+                visionDescription: response.content,
+              ));
           context.incrementLlmVisionCalls();
         } catch (e) {
           context.addWarning('LLM Vision failed for ${part.id}: $e');
@@ -571,7 +577,7 @@ class IngestPipeline {
     // Build Evidence entity
     context.evidence = Evidence(
       evidenceId: document.id,
-      workspaceId: 'default',
+      workspaceId: context.options.workspaceId,
       sourceType: _mapSourceType(document.metadata.mimeType),
       content: input.contentRef ?? '',
       contentHash: document.metadata.sha256,
@@ -587,8 +593,10 @@ class IngestPipeline {
       fragmentIds: context.fragments?.map((f) => f.fragmentId).toList() ?? [],
       metadata: {
         if (document.metadata.title != null) 'title': document.metadata.title,
-        if (document.metadata.pageCount != null) 'pageCount': document.metadata.pageCount,
-        if (document.metadata.language != null) 'language': document.metadata.language,
+        if (document.metadata.pageCount != null)
+          'pageCount': document.metadata.pageCount,
+        if (document.metadata.language != null)
+          'language': document.metadata.language,
         'provenance': {
           'extractorId': document.provenance.extractorId,
           'extractorVersion': document.provenance.extractorVersion,
@@ -596,11 +604,14 @@ class IngestPipeline {
       },
     );
 
-    // Update fragment evidenceId references
+    // A fragment belongs to its evidence and to the evidence's workspace.
     if (context.fragments != null) {
-      context.fragments = context.fragments!.map((f) => f.copyWith(
-        evidenceId: context.evidence!.evidenceId,
-      )).toList();
+      context.fragments = context.fragments!
+          .map((f) => f.copyWith(
+                evidenceId: context.evidence!.evidenceId,
+                workspaceId: context.options.workspaceId,
+              ))
+          .toList();
     }
   }
 

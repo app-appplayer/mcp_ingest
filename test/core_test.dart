@@ -111,7 +111,8 @@ void main() {
     });
 
     test('records Vision usage', () {
-      tracker.recordVision(calls: 5, processingTime: const Duration(seconds: 2));
+      tracker.recordVision(
+          calls: 5, processingTime: const Duration(seconds: 2));
       expect(tracker.visionCalls, equals(5));
       expect(tracker.visionCost, closeTo(0.005, 0.001));
     });
@@ -163,10 +164,19 @@ void main() {
     test('toJson includes all fields', () {
       const summary = UsageSummary(
         ocr: OcrUsage(pages: 10, processingTime: Duration.zero, cost: 0.01),
-        asr: AsrUsage(audioDuration: Duration.zero, processingTime: Duration.zero, cost: 0.0),
-        vision: VisionUsage(calls: 5, processingTime: Duration.zero, cost: 0.005),
-        llmVision: LlmVisionUsage(calls: 0, inputTokens: 0, outputTokens: 0, cost: 0.0),
-        storage: StorageUsage(bytes: 0, storeOperations: 0, retrieveOperations: 0, monthlyCost: 0.0),
+        asr: AsrUsage(
+            audioDuration: Duration.zero,
+            processingTime: Duration.zero,
+            cost: 0.0),
+        vision:
+            VisionUsage(calls: 5, processingTime: Duration.zero, cost: 0.005),
+        llmVision: LlmVisionUsage(
+            calls: 0, inputTokens: 0, outputTokens: 0, cost: 0.0),
+        storage: StorageUsage(
+            bytes: 0,
+            storeOperations: 0,
+            retrieveOperations: 0,
+            monthlyCost: 0.0),
         totalCost: 0.015,
       );
       final json = summary.toJson();
@@ -526,16 +536,23 @@ void main() {
 
   group('FragmentPatternType', () {
     test('fromString parses valid types', () {
-      expect(FragmentPatternType.fromString('regex'), equals(FragmentPatternType.regex));
-      expect(FragmentPatternType.fromString('keyword'), equals(FragmentPatternType.keyword));
-      expect(FragmentPatternType.fromString('keyValue'), equals(FragmentPatternType.keyValue));
-      expect(FragmentPatternType.fromString('jsonPath'), equals(FragmentPatternType.jsonPath));
-      expect(FragmentPatternType.fromString('xpath'), equals(FragmentPatternType.xpath));
-      expect(FragmentPatternType.fromString('custom'), equals(FragmentPatternType.custom));
+      expect(FragmentPatternType.fromString('regex'),
+          equals(FragmentPatternType.regex));
+      expect(FragmentPatternType.fromString('keyword'),
+          equals(FragmentPatternType.keyword));
+      expect(FragmentPatternType.fromString('keyValue'),
+          equals(FragmentPatternType.keyValue));
+      expect(FragmentPatternType.fromString('jsonPath'),
+          equals(FragmentPatternType.jsonPath));
+      expect(FragmentPatternType.fromString('xpath'),
+          equals(FragmentPatternType.xpath));
+      expect(FragmentPatternType.fromString('custom'),
+          equals(FragmentPatternType.custom));
     });
 
     test('fromString returns regex for invalid', () {
-      expect(FragmentPatternType.fromString('invalid'), equals(FragmentPatternType.regex));
+      expect(FragmentPatternType.fromString('invalid'),
+          equals(FragmentPatternType.regex));
     });
   });
 
@@ -661,47 +678,37 @@ void main() {
 
   group('IngestOptionsBuilder extended', () {
     test('enables all vision options', () {
-      final options = IngestOptionsBuilder()
-          .enableVision()
-          .enableLlmVision()
-          .build();
+      final options =
+          IngestOptionsBuilder().enableVision().enableLlmVision().build();
       expect(options.enableVision, isTrue);
       expect(options.enableLlmVision, isTrue);
     });
 
     test('sets storage and fragment options', () {
-      final options = IngestOptionsBuilder()
-          .storeAssets(false)
-          .extractFragments()
-          .build();
+      final options =
+          IngestOptionsBuilder().storeAssets(false).extractFragments().build();
       expect(options.storeAssets, isFalse);
       expect(options.extractFragments, isTrue);
     });
 
     test('sets maxPages and maxFileSize', () {
-      final options = IngestOptionsBuilder()
-          .maxPages(50)
-          .maxFileSize(5000000)
-          .build();
+      final options =
+          IngestOptionsBuilder().maxPages(50).maxFileSize(5000000).build();
       expect(options.maxPages, equals(50));
       expect(options.maxFileSize, equals(5000000));
     });
 
     test('sets language and fragment rules', () {
-      final options = IngestOptionsBuilder()
-          .language('en')
-          .fragmentRules([
-            const FragmentRule(id: 'r1', field: 'name', pattern: r'\w+'),
-          ])
-          .build();
+      final options = IngestOptionsBuilder().language('en').fragmentRules([
+        const FragmentRule(id: 'r1', field: 'name', pattern: r'\w+'),
+      ]).build();
       expect(options.language, equals('en'));
       expect(options.fragmentRules?.length, equals(1));
     });
 
     test('sets timeout', () {
-      final options = IngestOptionsBuilder()
-          .timeout(const Duration(seconds: 30))
-          .build();
+      final options =
+          IngestOptionsBuilder().timeout(const Duration(seconds: 30)).build();
       expect(options.timeout, equals(const Duration(seconds: 30)));
     });
 
@@ -719,9 +726,7 @@ void main() {
     });
 
     test('enableAsr method', () {
-      final options = IngestOptionsBuilder()
-          .enableAsr()
-          .build();
+      final options = IngestOptionsBuilder().enableAsr().build();
       expect(options.enableAsr, isTrue);
     });
   });
@@ -801,17 +806,20 @@ void main() {
   group('CommonFragmentRules', () {
     test('amount rule is configured', () {
       expect(CommonFragmentRules.amount.field, equals('amount'));
-      expect(CommonFragmentRules.amount.valueType, equals(FragmentValueType.currency));
+      expect(CommonFragmentRules.amount.valueType,
+          equals(FragmentValueType.currency));
     });
 
     test('date rule is configured', () {
       expect(CommonFragmentRules.date.field, equals('date'));
-      expect(CommonFragmentRules.date.valueType, equals(FragmentValueType.date));
+      expect(
+          CommonFragmentRules.date.valueType, equals(FragmentValueType.date));
     });
 
     test('merchant rule is configured', () {
       expect(CommonFragmentRules.merchant.field, equals('merchant'));
-      expect(CommonFragmentRules.merchant.valueType, equals(FragmentValueType.string));
+      expect(CommonFragmentRules.merchant.valueType,
+          equals(FragmentValueType.string));
     });
 
     test('all returns all common rules', () {
@@ -887,20 +895,18 @@ void main() {
     });
 
     test('fromString with valid values', () {
-      expect(
-          FragmentValueType.fromString('number'), FragmentValueType.number);
+      expect(FragmentValueType.fromString('number'), FragmentValueType.number);
       expect(
           FragmentValueType.fromString('boolean'), FragmentValueType.boolean);
       expect(FragmentValueType.fromString('date'), FragmentValueType.date);
-      expect(FragmentValueType.fromString('datetime'),
-          FragmentValueType.datetime);
-      expect(FragmentValueType.fromString('currency'),
-          FragmentValueType.currency);
+      expect(
+          FragmentValueType.fromString('datetime'), FragmentValueType.datetime);
+      expect(
+          FragmentValueType.fromString('currency'), FragmentValueType.currency);
       expect(FragmentValueType.fromString('percentage'),
           FragmentValueType.percentage);
       expect(FragmentValueType.fromString('array'), FragmentValueType.array);
-      expect(
-          FragmentValueType.fromString('object'), FragmentValueType.object);
+      expect(FragmentValueType.fromString('object'), FragmentValueType.object);
       expect(
           FragmentValueType.fromString('unknown'), FragmentValueType.unknown);
     });
@@ -1189,7 +1195,7 @@ void main() {
     test('collectBytes top-level function', () async {
       final stream = Stream.fromIterable([
         [65, 66, 67], // ABC
-        [68, 69],     // DE
+        [68, 69], // DE
       ]);
       final bytes = await collectBytes(stream);
       expect(bytes.length, equals(5));
@@ -1222,9 +1228,18 @@ void main() {
     test('detect WebP magic bytes', () {
       // RIFF....WEBP
       final bytes = [
-        0x52, 0x49, 0x46, 0x46,
-        0x00, 0x00, 0x00, 0x00,
-        0x57, 0x45, 0x42, 0x50,
+        0x52,
+        0x49,
+        0x46,
+        0x46,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x57,
+        0x45,
+        0x42,
+        0x50,
       ];
       final ct = ContentTypeDetector.detect(bytes, 'img.webp');
       expect(ct, isNotNull);
@@ -1248,9 +1263,18 @@ void main() {
     test('detect WAV magic bytes', () {
       // RIFF....WAVE
       final bytes = [
-        0x52, 0x49, 0x46, 0x46,
-        0x00, 0x00, 0x00, 0x00,
-        0x57, 0x41, 0x56, 0x45,
+        0x52,
+        0x49,
+        0x46,
+        0x46,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x57,
+        0x41,
+        0x56,
+        0x45,
       ];
       final ct = ContentTypeDetector.detect(bytes, 'audio.wav');
       expect(ct, isNotNull);
@@ -1458,7 +1482,9 @@ void main() {
       expect(
         () => budget.checkAsrBudget(const Duration(minutes: 10)),
         throwsA(isA<BudgetExceededException>().having(
-          (e) => e.operation, 'operation', contains('ASR (total budget)'),
+          (e) => e.operation,
+          'operation',
+          contains('ASR (total budget)'),
         )),
       );
     });
@@ -1469,7 +1495,9 @@ void main() {
       expect(
         () => budget.checkVisionBudget(100),
         throwsA(isA<BudgetExceededException>().having(
-          (e) => e.operation, 'operation', contains('Vision (total budget)'),
+          (e) => e.operation,
+          'operation',
+          contains('Vision (total budget)'),
         )),
       );
     });
@@ -1480,7 +1508,9 @@ void main() {
       expect(
         () => budget.checkLlmBudget(100),
         throwsA(isA<BudgetExceededException>().having(
-          (e) => e.operation, 'operation', contains('LLM (total budget)'),
+          (e) => e.operation,
+          'operation',
+          contains('LLM (total budget)'),
         )),
       );
     });

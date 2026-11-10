@@ -141,8 +141,8 @@ class IngestContext {
   /// Estimated API cost in USD.
   double get estimatedCost {
     return ocrCalls * 0.001 +
-           asrCalls * 0.006 +
-           visionPortCalls * 0.001 +
-           llmVisionCalls * 0.01;
+        asrCalls * 0.006 +
+        visionPortCalls * 0.001 +
+        llmVisionCalls * 0.01;
   }
 }

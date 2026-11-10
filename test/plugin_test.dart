@@ -1,5 +1,4 @@
 import 'package:test/test.dart';
-import 'package:mcp_bundle/ports.dart';
 import 'package:mcp_ingest/mcp_ingest.dart';
 // OcrWord is hidden from barrel export, import directly.
 import 'package:mcp_ingest/src/plugins/plugin.dart' show OcrWord;
@@ -214,7 +213,8 @@ void main() {
 
     test('all fields', () {
       const words = [
-        OcrWord(text: 'hi', confidence: 0.99, x: 0, y: 0, width: 50, height: 20),
+        OcrWord(
+            text: 'hi', confidence: 0.99, x: 0, y: 0, width: 50, height: 20),
       ];
       const result = OcrPluginResult(
         text: 'hi',
@@ -812,7 +812,9 @@ void main() {
         );
       });
 
-      test('throws PortNotConfiguredException when local unavailable and cloud null', () async {
+      test(
+          'throws PortNotConfiguredException when local unavailable and cloud null',
+          () async {
         final port = HybridOcrPort(
           local: MockOcrPort(available: false),
           cloud: null,
@@ -888,7 +890,9 @@ void main() {
         expect(result.text, 'mock text');
       });
 
-      test('throws PortNotConfiguredException when cloud null and local unavailable', () async {
+      test(
+          'throws PortNotConfiguredException when cloud null and local unavailable',
+          () async {
         final port = HybridOcrPort(
           local: MockOcrPort(available: false),
           cloud: null,
@@ -1087,7 +1091,9 @@ void main() {
         );
       });
 
-      test('throws PortNotConfiguredException when local unavailable and cloud null', () async {
+      test(
+          'throws PortNotConfiguredException when local unavailable and cloud null',
+          () async {
         final port = HybridAsrPort(
           local: MockAsrPort(available: false),
           cloud: null,
@@ -1163,7 +1169,9 @@ void main() {
         expect(result.text, 'mock text');
       });
 
-      test('throws PortNotConfiguredException when cloud null and local unavailable', () async {
+      test(
+          'throws PortNotConfiguredException when cloud null and local unavailable',
+          () async {
         final port = HybridAsrPort(
           local: MockAsrPort(available: false),
           cloud: null,

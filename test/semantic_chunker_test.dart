@@ -24,8 +24,7 @@ class MockLlmPort extends LlmPort {
 NormalizedDocument _createDoc(String text) {
   return NormalizedDocument(
     id: 'doc1',
-    metadata:
-        const DocumentMetadata(mimeType: 'text/plain', sha256: 'abc123'),
+    metadata: const DocumentMetadata(mimeType: 'text/plain', sha256: 'abc123'),
     parts: [TextBlock(id: 'p1', text: text)],
     structure: DocumentStructure.empty,
     provenance: ExtractionProvenance(
@@ -41,11 +40,8 @@ NormalizedDocument _createDoc(String text) {
 NormalizedDocument _createMultiPartDoc(List<MapEntry<String, String>> parts) {
   return NormalizedDocument(
     id: 'doc1',
-    metadata:
-        const DocumentMetadata(mimeType: 'text/plain', sha256: 'abc123'),
-    parts: parts
-        .map((e) => TextBlock(id: e.key, text: e.value))
-        .toList(),
+    metadata: const DocumentMetadata(mimeType: 'text/plain', sha256: 'abc123'),
+    parts: parts.map((e) => TextBlock(id: e.key, text: e.value)).toList(),
     structure: DocumentStructure.empty,
     provenance: ExtractionProvenance(
       extractorId: 'test',
@@ -565,7 +561,8 @@ void main() {
       expect(chunks[0].text, contains('total: 250.00'));
     });
 
-    test('handles ImageBlock part via caption/ocrText/visionDescription', () async {
+    test('handles ImageBlock part via caption/ocrText/visionDescription',
+        () async {
       // Create a document with an ImageBlock to exercise lines 230-231
       // _extractPartText is called internally for sourceSpan calculation
       // and part offset mapping, even though the chunk text comes from fullText

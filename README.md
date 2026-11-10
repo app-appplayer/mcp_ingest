@@ -26,14 +26,18 @@ final result = await pipeline.ingest(
 print('Extracted ${result.chunks.length} chunks');
 ```
 
-With OCR/ASR plugins:
+With OCR/ASR plugins (the built-in extractors and chunkers, plus your ports):
 
 ```dart
 final pipeline = IngestPipeline(
+  extractors: ExtractorRegistry.defaults(),
+  chunkerFactory: ChunkerFactory(),
   ocrPort: tesseractOcrPlugin,
   asrPort: whisperAsrPlugin,
 );
 ```
+
+Text, fragments and the Evidence built at the end carry the workspace given in `IngestOptions.workspaceId`; `example/example.dart` ingests a JSON receipt and extracts a fragment by rule.
 
 ## Support
 

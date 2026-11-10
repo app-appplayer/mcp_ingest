@@ -17,12 +17,14 @@ class PageChunker implements Chunker {
   String get name => 'Page Chunker';
 
   @override
-  Future<List<Chunk>> chunk(NormalizedDocument document, ChunkOptions options) async {
+  Future<List<Chunk>> chunk(
+      NormalizedDocument document, ChunkOptions options) async {
     final chunks = <Chunk>[];
 
     // Group parts by page using structure
     final pageNodes = document.structure.nodes
-        .where((n) => n.type == StructureType.page || n.type == StructureType.slide)
+        .where((n) =>
+            n.type == StructureType.page || n.type == StructureType.slide)
         .toList();
 
     if (pageNodes.isNotEmpty) {
@@ -50,7 +52,8 @@ class PageChunker implements Chunker {
             index: chunkIndex,
             totalChunks: 0,
             sourceSpans: pageNode.partIds
-                .map((id) => ChunkSpan(partId: id, startOffset: 0, endOffset: 0))
+                .map(
+                    (id) => ChunkSpan(partId: id, startOffset: 0, endOffset: 0))
                 .toList(),
             location: SourceLocation(pageNumber: pageNum),
             metadata: {

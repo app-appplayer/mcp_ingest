@@ -13,6 +13,7 @@ import '../document/document_structure.dart';
 import '../document/normalized_document.dart';
 import '../document/source_location.dart';
 import 'extractor.dart';
+import 'text_decoding.dart';
 
 /// Extracts plain text and markdown files.
 class TextExtractor extends Extractor {
@@ -44,7 +45,11 @@ class TextExtractor extends Extractor {
     ExtractOptions options,
   ) async {
     final stopwatch = Stopwatch()..start();
-    final content = await utf8.decodeStream(input);
+    final content = await decodeText(
+      input,
+      extractorId: id,
+      encoding: options.custom?['encoding'] as String?,
+    );
     final isMarkdown = options.custom?['isMarkdown'] == true;
 
     final document = isMarkdown
@@ -98,7 +103,8 @@ class TextExtractor extends Extractor {
               id: 'p$partIndex',
               text: text,
               type: TextBlockType.paragraph,
-              location: SourceLocation(lineNumber: lineNumber - currentSection.length),
+              location: SourceLocation(
+                  lineNumber: lineNumber - currentSection.length),
             ));
             partIndex++;
           }
@@ -136,7 +142,8 @@ class TextExtractor extends Extractor {
               id: 'p$partIndex',
               text: text,
               type: TextBlockType.paragraph,
-              location: SourceLocation(lineNumber: lineNumber - currentSection.length),
+              location: SourceLocation(
+                  lineNumber: lineNumber - currentSection.length),
             ));
             partIndex++;
           }
@@ -162,7 +169,8 @@ class TextExtractor extends Extractor {
             text: codeLines.join('\n'),
             type: TextBlockType.code,
             language: language.isNotEmpty ? language : null,
-            location: SourceLocation(lineNumber: lineNumber - codeLines.length - 1),
+            location:
+                SourceLocation(lineNumber: lineNumber - codeLines.length - 1),
           ));
           partIndex++;
         }
@@ -180,7 +188,8 @@ class TextExtractor extends Extractor {
           id: 'p$partIndex',
           text: text,
           type: TextBlockType.paragraph,
-          location: SourceLocation(lineNumber: lineNumber - currentSection.length),
+          location:
+              SourceLocation(lineNumber: lineNumber - currentSection.length),
         ));
       }
     }

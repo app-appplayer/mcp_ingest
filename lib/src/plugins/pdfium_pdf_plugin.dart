@@ -86,9 +86,9 @@ class PdfiumPdfPlugin extends PdfPlugin {
 
         // Extract single page
         final args = [
-          '-f', '${i + 1}',  // First page (1-indexed)
-          '-l', '${i + 1}',  // Last page
-          '-layout',         // Maintain layout
+          '-f', '${i + 1}', // First page (1-indexed)
+          '-l', '${i + 1}', // Last page
+          '-layout', // Maintain layout
           inputFile.path,
           outputFile.path,
         ];
@@ -143,8 +143,8 @@ class PdfiumPdfPlugin extends PdfPlugin {
 
       // Use pdftoppm to render page
       final args = [
-        '-f', '${pageIndex + 1}',  // First page (1-indexed)
-        '-l', '${pageIndex + 1}',  // Last page
+        '-f', '${pageIndex + 1}', // First page (1-indexed)
+        '-l', '${pageIndex + 1}', // Last page
         '-r', options.dpi.toString(),
         if (options.format == 'png') '-png',
         inputFile.path,
@@ -238,17 +238,21 @@ class PdfiumPdfPlugin extends PdfPlugin {
     }
   }
 
-  Future<(double, double)> _getPageDimensions(String pdfPath, int pageIndex) async {
+  Future<(double, double)> _getPageDimensions(
+      String pdfPath, int pageIndex) async {
     try {
       final result = await Process.run(pdfinfoPath, [
-        '-f', '${pageIndex + 1}',
-        '-l', '${pageIndex + 1}',
+        '-f',
+        '${pageIndex + 1}',
+        '-l',
+        '${pageIndex + 1}',
         pdfPath,
       ]);
 
       if (result.exitCode == 0) {
         final output = result.stdout as String;
-        final sizeMatch = RegExp(r'Page size:\s+([\d.]+)\s+x\s+([\d.]+)').firstMatch(output);
+        final sizeMatch =
+            RegExp(r'Page size:\s+([\d.]+)\s+x\s+([\d.]+)').firstMatch(output);
 
         if (sizeMatch != null) {
           final width = double.tryParse(sizeMatch.group(1)!) ?? 612.0;

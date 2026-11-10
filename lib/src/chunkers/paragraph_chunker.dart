@@ -17,7 +17,8 @@ class ParagraphChunker implements Chunker {
   String get name => 'Paragraph Chunker';
 
   @override
-  Future<List<Chunk>> chunk(NormalizedDocument document, ChunkOptions options) async {
+  Future<List<Chunk>> chunk(
+      NormalizedDocument document, ChunkOptions options) async {
     final chunks = <Chunk>[];
     final buffer = StringBuffer();
     final spans = <ChunkSpan>[];

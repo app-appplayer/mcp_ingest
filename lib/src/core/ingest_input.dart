@@ -1,6 +1,7 @@
 /// Ingest input types.
 library;
 
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -80,7 +81,9 @@ class IngestInput {
     String? filename,
     String mimeType = 'text/plain',
   }) {
-    final bytes = Uint8List.fromList(content.codeUnits);
+    // UTF-8, the encoding the text extractors read; UTF-16 code units
+    // truncated to bytes would corrupt every non-Latin-1 character.
+    final bytes = Uint8List.fromList(utf8.encode(content));
     return IngestInput(
       stream: Stream.value(bytes),
       filename: filename,

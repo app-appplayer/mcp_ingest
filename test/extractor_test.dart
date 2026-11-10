@@ -150,9 +150,8 @@ More content.''';
         const ExtractOptions(custom: {'isMarkdown': true}),
       );
 
-      final headings = doc.textBlocks
-          .where((b) => b.type == TextBlockType.heading)
-          .toList();
+      final headings =
+          doc.textBlocks.where((b) => b.type == TextBlockType.heading).toList();
       expect(headings.length, equals(2));
       expect(headings[0].text, equals('Title'));
       expect(headings[0].headingLevel, equals(1));
@@ -176,9 +175,8 @@ Done.''';
         const ExtractOptions(custom: {'isMarkdown': true}),
       );
 
-      final codeBlocks = doc.textBlocks
-          .where((b) => b.type == TextBlockType.code)
-          .toList();
+      final codeBlocks =
+          doc.textBlocks.where((b) => b.type == TextBlockType.code).toList();
       expect(codeBlocks.length, equals(1));
       expect(codeBlocks[0].language, equals('dart'));
       expect(codeBlocks[0].text, contains('print'));
@@ -288,9 +286,8 @@ Done.''';
       final input = Stream.value(utf8.encode(content));
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
-      final headings = doc.textBlocks
-          .where((b) => b.type == TextBlockType.heading)
-          .toList();
+      final headings =
+          doc.textBlocks.where((b) => b.type == TextBlockType.heading).toList();
       expect(headings.isNotEmpty, isTrue);
       expect(headings.any((h) => h.text.contains('Main Title')), isTrue);
     });
@@ -358,9 +355,8 @@ Done.''';
       final input = Stream.value(utf8.encode(content));
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
-      final codeBlocks = doc.textBlocks
-          .where((b) => b.type == TextBlockType.code)
-          .toList();
+      final codeBlocks =
+          doc.textBlocks.where((b) => b.type == TextBlockType.code).toList();
       expect(codeBlocks.isNotEmpty, isTrue);
     });
 
@@ -584,7 +580,6 @@ Done.''';
       expect(imageBlock.width, equals(16));
       expect(imageBlock.height, equals(32));
     });
-
   });
 
   group('AudioExtractor', () {
@@ -680,7 +675,6 @@ Done.''';
       final audioBlock = doc.parts.first as AudioBlock;
       expect(audioBlock.format, equals('flac'));
     });
-
   });
 
   group('Extractor estimateDuration', () {
@@ -850,15 +844,18 @@ Done.''';
     test('supports DOCX, XLSX, PPTX types', () {
       expect(
         extractor.supportedTypes,
-        contains('application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+        contains(
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
       );
       expect(
         extractor.supportedTypes,
-        contains('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+        contains(
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
       );
       expect(
         extractor.supportedTypes,
-        contains('application/vnd.openxmlformats-officedocument.presentationml.presentation'),
+        contains(
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'),
       );
     });
 
@@ -903,7 +900,8 @@ Done.''';
         utf8.encode(documentXml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
@@ -944,13 +942,13 @@ Done.''';
         utf8.encode(documentXml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
-      final headings = doc.textBlocks
-          .where((b) => b.type == TextBlockType.heading)
-          .toList();
+      final headings =
+          doc.textBlocks.where((b) => b.type == TextBlockType.heading).toList();
       expect(headings.length, equals(1));
       expect(headings.first.text, equals('Chapter One'));
       // Structure should include heading
@@ -991,7 +989,8 @@ Done.''';
         utf8.encode(documentXml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(
         input,
@@ -1047,7 +1046,8 @@ Done.''';
         utf8.encode(sheet1Xml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
@@ -1093,7 +1093,8 @@ Done.''';
         utf8.encode(slide1Xml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
@@ -1102,10 +1103,12 @@ Done.''';
       expect(doc.fullText, contains('Slide Title'));
       expect(doc.fullText, contains('Bullet point one'));
       // Structure should have slide node
-      expect(doc.structure.nodes.any((n) => n.type == StructureType.slide), isTrue);
+      expect(doc.structure.nodes.any((n) => n.type == StructureType.slide),
+          isTrue);
     });
 
-    test('throws UnsupportedFormatException for unrecognized office type', () async {
+    test('throws UnsupportedFormatException for unrecognized office type',
+        () async {
       // ZIP without [Content_Types].xml causes _detectOfficeType to return
       // 'application/zip' which does not match any of the three office types
       final archive = Archive();
@@ -1114,7 +1117,8 @@ Done.''';
         5,
         utf8.encode('hello'),
       ));
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
 
       expect(
@@ -1137,7 +1141,8 @@ Done.''';
         utf8.encode(contentTypesXml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
 
       expect(
@@ -1146,7 +1151,9 @@ Done.''';
       );
     });
 
-    test('detects heading level from style ending with digit and containing head', () async {
+    test(
+        'detects heading level from style ending with digit and containing head',
+        () async {
       // Style "customHead2" ends with a digit and contains "head",
       // triggering the fallback heading level detection (lines 180-182)
       final archive = Archive();
@@ -1180,13 +1187,13 @@ Done.''';
         utf8.encode(documentXml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
-      final headings = doc.textBlocks
-          .where((b) => b.type == TextBlockType.heading)
-          .toList();
+      final headings =
+          doc.textBlocks.where((b) => b.type == TextBlockType.heading).toList();
       expect(headings.length, equals(1));
       expect(headings.first.text, equals('Subheading via custom style'));
       expect(headings.first.headingLevel, equals(2));
@@ -1222,7 +1229,8 @@ Done.''';
         utf8.encode(sheet1Xml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
@@ -1287,7 +1295,8 @@ Done.''';
         utf8.encode(sheet1Xml),
       ));
 
-      final zipBytes = Uint8List.fromList(ZipEncoder().encode(archive)!);
+      final zipBytes =
+          Uint8List.fromList(_zipped(ZipEncoder().encode(archive)));
       final input = Stream.value(zipBytes);
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
@@ -1384,9 +1393,8 @@ Done.''';
       final input = Stream.value(utf8.encode(content));
       final doc = await extractor.extract(input, ExtractOptions.defaults);
 
-      final quotes = doc.textBlocks
-          .where((b) => b.type == TextBlockType.quote)
-          .toList();
+      final quotes =
+          doc.textBlocks.where((b) => b.type == TextBlockType.quote).toList();
       expect(quotes.length, equals(1));
       expect(quotes.first.text, equals('This is a famous quote.'));
     });
@@ -1729,8 +1737,22 @@ list:
     test('returns unknown format for unrecognized audio bytes', () async {
       // Random bytes that do not match any known audio format
       final unknownBytes = Uint8List.fromList([
-        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-        0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+        0x00,
+        0x01,
+        0x02,
+        0x03,
+        0x04,
+        0x05,
+        0x06,
+        0x07,
+        0x08,
+        0x09,
+        0x0A,
+        0x0B,
+        0x0C,
+        0x0D,
+        0x0E,
+        0x0F,
       ]);
 
       final input = Stream.value(unknownBytes);
@@ -1849,7 +1871,9 @@ list:
       extractor = ImageExtractor();
     });
 
-    test('JPEG with non-SOF marker skips bytes and exits loop without dimensions', () async {
+    test(
+        'JPEG with non-SOF marker skips bytes and exits loop without dimensions',
+        () async {
       // Build a JPEG that has a non-FF byte after SOI.
       // The while loop condition is: offset < bytes.length - 8
       // So bytes.length must be > offset + 8 (i.e., > 10) for the loop to run.
@@ -1858,8 +1882,9 @@ list:
       // Falls through to line 133 (JPEG without dimensions).
       final jpegBytes = Uint8List.fromList([
         0xFF, 0xD8, // SOI marker (offset starts at 2)
-        0x00,       // non-FF byte -> triggers offset++ (line 130)
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // padding to reach 11 bytes
+        0x00, // non-FF byte -> triggers offset++ (line 130)
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, // padding to reach 11 bytes
       ]);
 
       final input = Stream.value(jpegBytes);
@@ -1952,3 +1977,7 @@ class _DefaultPriorityExtractor extends Extractor {
     throw UnimplementedError();
   }
 }
+
+/// The bytes of an encoded zip: archive 3 returns them nullable, archive 4
+/// does not; both are accepted (`archive: ">=3.6.1 <5.0.0"`).
+List<int> _zipped(List<int>? bytes) => bytes!;

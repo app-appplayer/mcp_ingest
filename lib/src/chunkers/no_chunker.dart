@@ -16,7 +16,8 @@ class NoChunker implements Chunker {
   String get name => 'No Chunker';
 
   @override
-  Future<List<Chunk>> chunk(NormalizedDocument document, ChunkOptions options) async {
+  Future<List<Chunk>> chunk(
+      NormalizedDocument document, ChunkOptions options) async {
     final fullText = document.fullText;
 
     if (fullText.isEmpty) return [];

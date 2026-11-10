@@ -13,6 +13,7 @@ import '../document/document_part.dart';
 import '../document/document_structure.dart';
 import '../document/normalized_document.dart';
 import 'extractor.dart';
+import 'text_decoding.dart';
 
 /// Extracts HTML/XML documents.
 class HtmlExtractor extends Extractor {
@@ -40,7 +41,11 @@ class HtmlExtractor extends Extractor {
     ExtractOptions options,
   ) async {
     final stopwatch = Stopwatch()..start();
-    final content = await utf8.decodeStream(input);
+    final content = await decodeText(
+      input,
+      extractorId: id,
+      encoding: options.custom?['encoding'] as String?,
+    );
     final document = html_parser.parse(content);
     final parts = <DocumentPart>[];
     var partIndex = 0;
@@ -207,11 +212,8 @@ class HtmlExtractor extends Extractor {
         list.localName == 'ol' ? ListType.ordered : ListType.unordered;
 
     for (final li in list.children.where((e) => e.localName == 'li')) {
-      final content = li.nodes
-          .whereType<Text>()
-          .map((t) => t.text)
-          .join()
-          .trim();
+      final content =
+          li.nodes.whereType<Text>().map((t) => t.text).join().trim();
 
       final nestedList = li.querySelector('ul, ol');
       List<ListItem>? children;

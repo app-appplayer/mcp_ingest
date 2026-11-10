@@ -168,8 +168,8 @@ class ExtractionProvenance {
       ),
       settings: json['settings'] as Map<String, dynamic>?,
       warnings: (json['warnings'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList(),
+          ?.map((e) => e as String)
+          .toList(),
     );
   }
 

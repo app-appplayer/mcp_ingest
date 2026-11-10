@@ -44,8 +44,10 @@ class FragmentRule {
     return FragmentRule(
       id: json['id'] as String,
       field: json['field'] as String,
-      valueType: FragmentValueType.fromString(json['valueType'] as String? ?? 'string'),
-      patternType: FragmentPatternType.fromString(json['patternType'] as String? ?? 'regex'),
+      valueType: FragmentValueType.fromString(
+          json['valueType'] as String? ?? 'string'),
+      patternType: FragmentPatternType.fromString(
+          json['patternType'] as String? ?? 'regex'),
       pattern: json['pattern'] as String,
       transform: json['transform'] as String?,
       minConfidence: (json['minConfidence'] as num?)?.toDouble() ?? 0.5,

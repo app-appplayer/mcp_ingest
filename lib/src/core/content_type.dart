@@ -23,7 +23,8 @@ class ContentType {
   });
 
   /// Check if this is a text-based format.
-  bool get isText => mimeType.startsWith('text/') || _textBasedMimes.contains(mimeType);
+  bool get isText =>
+      mimeType.startsWith('text/') || _textBasedMimes.contains(mimeType);
 
   /// Check if this is an image format.
   bool get isImage => mimeType.startsWith('image/');
@@ -156,8 +157,7 @@ class ContentTypeDetector {
     }
 
     // MP3: ID3 or FF FB
-    if (_matches(bytes, [0x49, 0x44, 0x33]) ||
-        _matches(bytes, [0xFF, 0xFB])) {
+    if (_matches(bytes, [0x49, 0x44, 0x33]) || _matches(bytes, [0xFF, 0xFB])) {
       return 'audio/mpeg';
     }
 
@@ -206,9 +206,12 @@ class ContentTypeDetector {
     '.yaml': 'application/x-yaml',
     '.yml': 'application/x-yaml',
     '.pdf': 'application/pdf',
-    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    '.docx':
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.xlsx':
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    '.pptx':
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     '.doc': 'application/msword',
     '.xls': 'application/vnd.ms-excel',
     '.ppt': 'application/vnd.ms-powerpoint',
@@ -236,9 +239,12 @@ class ContentTypeDetector {
     'application/json': '.json',
     'application/x-yaml': '.yaml',
     'application/pdf': '.pdf',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation': '.pptx',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+        '.docx',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        '.xlsx',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+        '.pptx',
     'image/png': '.png',
     'image/jpeg': '.jpg',
     'image/gif': '.gif',

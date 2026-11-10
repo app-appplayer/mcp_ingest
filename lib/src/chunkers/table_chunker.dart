@@ -16,7 +16,8 @@ class TableChunker implements Chunker {
   String get name => 'Table Chunker';
 
   @override
-  Future<List<Chunk>> chunk(NormalizedDocument document, ChunkOptions options) async {
+  Future<List<Chunk>> chunk(
+      NormalizedDocument document, ChunkOptions options) async {
     final chunks = <Chunk>[];
     var chunkIndex = 0;
     var currentText = StringBuffer();
